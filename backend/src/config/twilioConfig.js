@@ -2,9 +2,9 @@ const twilio = require("twilio");
 require("dotenv").config()
 
 // Retrieve environment variables
-const accountSid = process.env.ACCOUNT_SID 
-const authToken = process.env.AUTH_TOKEN 
-const verifyServiceSid = process.env.VERIFY_SERVICE_SID 
+const accountSid = process.env.ACCOUNT_SID;
+const authToken = process.env.AUTH_TOKEN ;
+const verifyServiceSid = process.env.VERIFY_SERVICE_SID; 
 
 // Check for missing values
 if (!accountSid || !authToken || !verifyServiceSid) {
