@@ -28,6 +28,10 @@ app.use(bodyParser.json());
 app.use("/api/v1/hotels", hotelRoute);
 app.use("/api/v1/user", userRoute);
 
+// Default route
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
 // Server start
 app.listen(PORT, () => {
