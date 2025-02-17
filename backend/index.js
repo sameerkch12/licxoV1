@@ -37,3 +37,12 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port http://localhost:${PORT}`);
 });
+
+// Keep the server awake on Render
+setInterval(() => {
+    https.get('https://licxov1-poan.onrender.com', (res) => {
+      console.log(`Server hit with status code: ${res.statusCode}`);
+    }).on('error', (e) => {
+      console.error(`Got error: ${e.message}`);
+    });
+  }, 3 * 60 * 1000); // Ping the server every 3 minutes (180000 ms)
