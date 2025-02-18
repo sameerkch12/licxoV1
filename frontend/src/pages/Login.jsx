@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Login = () => {
   const [step, setStep] = useState(1); // Tracks the current step
   const [phoneNumber, setPhoneNumber] = useState("+91");
@@ -18,7 +20,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:8000/api/v1/user/send-otp", { phoneNumber });
+      await axios.post(`${API_URL}/api/v1/user/send-otp`, { phoneNumber });
       alert("OTP sent successfully!");
       setStep(2);
     } catch (error) {
@@ -35,7 +37,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/v1/user/verify", {
+      const response = await axios.post(`${API_URL}/api/v1/user/verify`, {
         phoneNumber,
         code: otp,
       });
@@ -69,7 +71,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/v1/user/register", {
+      const response = await axios.post(`${API_URL}/api/v1/user/register`, {
         phoneNumber,
         username,
       });
