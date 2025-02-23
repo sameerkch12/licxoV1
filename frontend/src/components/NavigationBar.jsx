@@ -1,12 +1,27 @@
 import { IoMdHome } from "react-icons/io";
 import { FiPlusCircle } from "react-icons/fi";
 import { IoIosHeartEmpty } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
+const useAuth = () => {
+  return !!localStorage.getItem("token");
+};
 
 const NavigationBar = () => {
+  const navigate = useNavigate();
+  const isAuthenticated = useAuth();
+
+  const handleAddHotel = () => {
+    if (isAuthenticated) {
+      navigate("/addhotel");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <div>
-        <div className="fixed bottom-0 left-0 h-20 w-full bg-blue-950 rounded-t-3xl lg:hidden">
+      <div className="fixed bottom-0 left-0 h-20 w-full bg-blue-950 rounded-t-3xl lg:hidden">
         <ul className="flex justify-between items-center px-6 h-full">
           <li className="flex flex-col items-center">
             <a href="/" className="flex flex-col items-center text-white">
@@ -14,13 +29,13 @@ const NavigationBar = () => {
               Home
             </a>
           </li>
-          <li className="">
-            <a href="/addhotel" className="flex flex-col items-center text-white">
+          <li>
+            <button onClick={handleAddHotel} className="flex flex-col items-center text-white">
               <FiPlusCircle className="text-2xl" />
               Add
-            </a>
+            </button>
           </li>
-          <li className="">
+          <li>
             <a href="/" className="flex flex-col items-center text-white">
               <IoIosHeartEmpty className="text-2xl" />
               Shortlist
@@ -29,7 +44,7 @@ const NavigationBar = () => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NavigationBar
+export default NavigationBar;
