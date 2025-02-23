@@ -15,6 +15,7 @@ const getUsername = () => {
 const Navbar = () => {
   const navigate = useNavigate();
   const isAuthenticated = useAuth();
+  
   const username = isAuthenticated ? getUsername() : "";
 
   const handleLogin = () => navigate("/login");
@@ -31,22 +32,23 @@ const Navbar = () => {
         <img src={logo} alt="" className="w-32 h-14" />
         <div className="flex items-center pr-4 space-x-4">
           {isAuthenticated ? (
-            <Link
-              to="/addhotel"
+            <button
+              onClick={() => navigate("/addhotel")}
               className="flex items-center px-4 py-2 bg-green-600 rounded hover:bg-green-500"
             >
               <IoMdAddCircleOutline className="mr-1 text-xl" />
               Add Listing
-            </Link>
+            </button>
           ) : (
-            <Link
-              to="/login"
+            <button
+              onClick={() => navigate("/login")}
               className="flex items-center px-4 py-2 bg-green-600 rounded hover:bg-green-500"
             >
               <IoMdAddCircleOutline className="mr-1 text-xl" />
               Sign up
-            </Link>
+            </button>
           )}
+
           {isAuthenticated ? (
             <button
               onClick={handleLogout}
@@ -62,9 +64,10 @@ const Navbar = () => {
               Login
             </button>
           )}
+
           {isAuthenticated && (
             <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-lg text-white">
-              {username[0].toUpperCase()}
+              {username && username[0]?.toUpperCase()}
             </div>
           )}
         </div>
@@ -77,7 +80,7 @@ const Navbar = () => {
           <button className="flex items-center justify-center w-10 h-10 text-4xl text-white">
             {isAuthenticated ? (
               <span className="bg-gray-600 w-10 h-10 rounded-full flex items-center justify-center text-lg">
-                {username[0].toUpperCase()}
+                {username && username[0]?.toUpperCase()}
               </span>
             ) : (
               <IoPersonCircleSharp />
