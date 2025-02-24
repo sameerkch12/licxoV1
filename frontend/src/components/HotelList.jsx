@@ -28,7 +28,6 @@ const HotelList = () => {
   // Fetch hotels when the component mounts
   useEffect(() => {
     dispatch(getAllHotels());
-    dispatch(findNearestHotels());
   }, [dispatch]);
 
   useEffect(() => {
