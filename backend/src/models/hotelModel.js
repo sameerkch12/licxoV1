@@ -8,7 +8,6 @@ const hotelSchema = new mongoose.Schema({
   phone: {
     type: Number,
     required: [true, "Phone number is required"],
-    unique: true,
   },
   address: {
     address1: {
