@@ -19,11 +19,16 @@ const Navbar = () => {
   const username = isAuthenticated ? getUsername() : "";
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleLogin = () => navigate("/login");
+  const handleLogin = () => {
+    setDropdownOpen(false);
+    navigate("/login");
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    navigate("/login");
+    setDropdownOpen(false);
+    window.location.href = "/"; // Redirect to home and refresh
   };
 
   return (
