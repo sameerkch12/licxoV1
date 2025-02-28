@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { IoReorderThree } from "react-icons/io5";
-import { FaCommentDots } from "react-icons/fa";
+import { FaCommentDots, FaHome, FaPhone } from "react-icons/fa";
 import logo from "../assets/Licxo.jpg";
 
 const useAuth = () => {
@@ -91,6 +91,33 @@ const Navbar = () => {
                   </button>
                 </li>
               )}
+              <li>
+                <Link
+                  to="/"
+                  className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <FaHome className="mr-2 text-xl" /> Home Page
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/addroom"
+                  className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <IoMdAddCircleOutline className="mr-2 text-xl" /> Add Your Room
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <FaPhone className="mr-2 text-xl" /> Contact Us
+                </Link>
+              </li>
               <li>
                 <Link
                   to="/feedback"
