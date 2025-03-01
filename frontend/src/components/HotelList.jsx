@@ -84,7 +84,7 @@ const HotelList = () => {
                     {hotel.images.map((image, index) => (
                       <img
                         key={index}
-                        src={image.url}
+                        src={image?.url || "fallback-image.jpg"}
                         alt={`Hotel ${index + 1}`}
                         className="w-full sm:w-64 h-68 object-cover flex-shrink-0"
                       />
@@ -110,8 +110,8 @@ const HotelList = () => {
                         <div
                           key={i}
                           className={`transition-all w-3 h-3 rounded-full ${currentIndexes[hotel._id] === i
-                              ? "bg-white p-1"
-                              : "bg-white bg-opacity-50"
+                            ? "bg-white p-1"
+                            : "bg-white bg-opacity-50"
                             }`}
                         ></div>
                       ))}
@@ -206,7 +206,7 @@ const HotelList = () => {
                   {hotel.images.map((image, index) => (
                     <img
                       key={index}
-                      src={image.url}
+                      src={image?.url || "fallback-image.jpg"}
                       alt={`Hotel ${index + 1}`}
                       className="w-full h-44 object-cover flex-shrink-0 rounded-t-3xl"
                     />
