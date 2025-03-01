@@ -8,6 +8,10 @@ export default defineConfig({
     historyApiFallback: true, // Fix direct route issue
   },
   build: {
+    rollupOptions: {
+      // Make sure lucide-react is properly bundled
+      external: []
+    },
     outDir: 'dist', // Ensure correct output directory
   }
 });
