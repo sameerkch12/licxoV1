@@ -1,3 +1,4 @@
+import Footer from "../components/Footer"
 import HotelList from "../components/HotelList"
 import Navbar from "../components/Navbar"
 import NavigationBar from "../components/NavigationBar"
@@ -8,9 +9,10 @@ const Home = () => {
   return (
     <div>
         <Navbar/>
-        <SearchFilterDistrict/>
+       <SearchFilterDistrict/>
         <HotelList/>
         <NavigationBar />
+        <Footer/>
     </div>
   )
 }
