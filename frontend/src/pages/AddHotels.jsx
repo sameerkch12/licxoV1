@@ -1,9 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { createHotel } from "../features/hotels/hotelsAPI";
-import { Building2, MapPin, Wifi, Bed, Phone, Home, IndianRupee, Upload, ArrowLeft, CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import {
+  Building2,
+  MapPin,
+  Wifi,
+  Bed,
+  Phone,
+  Home,
+  IndianRupee,
+  Upload,
+  ArrowLeft,
+  CheckCircle,
+} from "lucide-react";
+import PlacesAutocomplete from "react-places-autocomplete";
 
 const AddHotels = () => {
   const [hotel, setHotel] = useState({
@@ -20,12 +31,12 @@ const AddHotels = () => {
     latitude: null,
     longitude: null,
   });
-
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [previewUrls, setPreviewUrls] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,16 +56,16 @@ const AddHotels = () => {
       newErrors.room = "Please select a room type";
     if (images.length === 0) newErrors.images = "At least one image is required";
     if (hotel.latitude === null || hotel.longitude === null) {
-      newErrors.location = "Please use the 'Use My Location' button to set your location";
+      newErrors.location =
+        "Please use the 'Use My Location' button to set your location";
     }
     return newErrors;
   };
 
+  // Generic change handler for normal input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setHotel((prev) => ({ ...prev, [name]: value }));
-
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -64,16 +75,24 @@ const AddHotels = () => {
     }
   };
 
+  // Change handler for PlacesAutocomplete fields
+  const handlePlacesChange = (field, value) => {
+    setHotel((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
   const handleFileChange = (e) => {
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
       setImages(selectedFiles);
-
-      // Create preview URLs for the selected images
       const urls = selectedFiles.map((file) => URL.createObjectURL(file));
       setPreviewUrls(urls);
-
-      // Clear image error if it exists
       if (errors.images) {
         setErrors((prev) => {
           const newErrors = { ...prev };
@@ -90,8 +109,6 @@ const AddHotels = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           setHotel((prev) => ({ ...prev, latitude, longitude }));
-
-          // Clear location error if it exists
           if (errors.location) {
             setErrors((prev) => {
               const newErrors = { ...prev };
@@ -99,15 +116,13 @@ const AddHotels = () => {
               return newErrors;
             });
           }
-
-          // Show success toast for location
+          // Show success toast for location retrieval
           const toast = document.createElement("div");
           toast.className =
             "fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md";
           toast.innerHTML =
-            '<div class="flex items-center"><svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Location retrieved successfully!</div>';
+            '<div class="flex items-center"><svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Location retrieved successfully!</div>';
           document.body.appendChild(toast);
-
           setTimeout(() => {
             document.body.removeChild(toast);
           }, 3000);
@@ -116,7 +131,8 @@ const AddHotels = () => {
           console.error("Error getting location:", error);
           setErrors((prev) => ({
             ...prev,
-            location: "Unable to retrieve location. Please try again or enter manually.",
+            location:
+              "Unable to retrieve location. Please try again or enter manually.",
           }));
         }
       );
@@ -133,8 +149,6 @@ const AddHotels = () => {
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
-
-      // Scroll to the first error
       const firstErrorField = Object.keys(formErrors)[0];
       const element = document.querySelector(`[name="${firstErrorField}"]`);
       if (element) {
@@ -142,17 +156,10 @@ const AddHotels = () => {
       }
       return;
     }
-
     setLoading(true);
-
     try {
-      // Dispatch the createHotel action
       await dispatch(createHotel({ hotel, images }));
-
-      // Show success notification
       setShowSuccess(true);
-
-      // Reset form after 2 seconds
       setTimeout(() => {
         setShowSuccess(false);
         navigate("/");
@@ -178,7 +185,9 @@ const AddHotels = () => {
       console.error("Error adding hotel:", error.message);
       setErrors((prev) => ({
         ...prev,
-        general: `Error adding hotel: ${error.response?.data?.msg || error.message}`,
+        general: `Error adding hotel: ${
+          error.response?.data?.msg || error.message
+        }`,
       }));
     } finally {
       setLoading(false);
@@ -209,7 +218,10 @@ const AddHotels = () => {
 
       <div className="max-w-3xl mx-auto">
         <div className="mb-8 flex items-center">
-          <Link to="/" className="flex items-center text-blue-600 hover:text-blue-800">
+          <Link
+            to="/"
+            className="flex items-center text-blue-600 hover:text-blue-800"
+          >
             <ArrowLeft className="h-5 w-5 mr-2" />
             <span>Back to Hotels</span>
           </Link>
@@ -259,8 +271,10 @@ const AddHotels = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div className="col-span-2">
+            {/* Input Fields Group */}
+            <div className="grid grid-cols-1 gap-6">
+              {/* Hotel Name */}
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Hotel Name <span className="text-red-500">*</span>
                 </label>
@@ -286,6 +300,7 @@ const AddHotels = () => {
                 )}
               </div>
 
+              {/* Contact Number */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Contact Number <span className="text-red-500">*</span>
@@ -312,9 +327,11 @@ const AddHotels = () => {
                 )}
               </div>
 
+              {/* Price per Night */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Price per Night (₹) <span className="text-red-500">*</span>
+                  Price per Night (₹){" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <div className="relative rounded-md shadow-sm">
                   <div className="absolute left-0 pl-3 flex items-center pointer-events-none top-1/2 transform -translate-y-1/2">
@@ -338,7 +355,8 @@ const AddHotels = () => {
                 )}
               </div>
 
-              <div className="col-span-2">
+              {/* Address */}
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Address <span className="text-red-500">*</span>
                 </label>
@@ -360,52 +378,142 @@ const AddHotels = () => {
                   />
                 </div>
                 {errors.address1 && (
-                  <p className="mt-1 text-sm text-red-600">{errors.address1}</p>
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.address1}
+                  </p>
                 )}
               </div>
 
+              {/* District with Places Autocomplete */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   District <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  name="district"
-                  placeholder="Enter District"
+                <PlacesAutocomplete
                   value={hotel.district}
-                  onChange={handleChange}
-                  className={`block w-full px-3 py-3 border ${
-                    errors.district
-                      ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                      : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                  } rounded-lg`}
-                />
+                  onChange={(value) =>
+                    handlePlacesChange("district", value)
+                  }
+                  onSelect={(address) =>
+                    handlePlacesChange("district", address)
+                  }
+                  searchOptions={{ types: ["(regions)"] }}
+                >
+                  {({
+                    getInputProps,
+                    suggestions,
+                    getSuggestionItemProps,
+                    loading: loadingDistrict,
+                  }) => (
+                    <div className="relative">
+                      <input
+                        {...getInputProps({
+                          placeholder: "Enter District",
+                          name: "district",
+                        })}
+                        className={`block w-full px-3 py-3 border ${
+                          errors.district
+                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        } rounded-lg`}
+                      />
+                      {suggestions.length > 0 && (
+                        <div className="absolute left-0 right-0 bg-white border border-gray-300 z-10">
+                          {loadingDistrict && (
+                            <div className="p-2 text-gray-500">Loading...</div>
+                          )}
+                          {suggestions.map((suggestion, index) => {
+                            const style = suggestion.active
+                              ? { backgroundColor: "#e0e0e0", cursor: "pointer" }
+                              : { backgroundColor: "#fff", cursor: "pointer" };
+                            return (
+                              <div
+                                key={index}
+                                {...getSuggestionItemProps(suggestion, {
+                                  style,
+                                })}
+                                className="p-2"
+                              >
+                                <span>{suggestion.description}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </PlacesAutocomplete>
                 {errors.district && (
-                  <p className="mt-1 text-sm text-red-600">{errors.district}</p>
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.district}
+                  </p>
                 )}
               </div>
 
+              {/* State with Places Autocomplete */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   State <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  name="state"
-                  placeholder="Enter State"
+                <PlacesAutocomplete
                   value={hotel.state}
-                  onChange={handleChange}
-                  className={`block w-full px-3 py-3 border ${
-                    errors.state
-                      ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                      : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                  } rounded-lg`}
-                />
+                  onChange={(value) => handlePlacesChange("state", value)}
+                  onSelect={(address) => handlePlacesChange("state", address)}
+                  searchOptions={{ types: ["(regions)"] }}
+                >
+                  {({
+                    getInputProps,
+                    suggestions,
+                    getSuggestionItemProps,
+                    loading: loadingState,
+                  }) => (
+                    <div className="relative">
+                      <input
+                        {...getInputProps({
+                          placeholder: "Enter State",
+                          name: "state",
+                        })}
+                        className={`block w-full px-3 py-3 border ${
+                          errors.state
+                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        } rounded-lg`}
+                      />
+                      {suggestions.length > 0 && (
+                        <div className="absolute left-0 right-0 bg-white border border-gray-300 z-10">
+                          {loadingState && (
+                            <div className="p-2 text-gray-500">Loading...</div>
+                          )}
+                          {suggestions.map((suggestion, index) => {
+                            const style = suggestion.active
+                              ? { backgroundColor: "#e0e0e0", cursor: "pointer" }
+                              : { backgroundColor: "#fff", cursor: "pointer" };
+                            return (
+                              <div
+                                key={index}
+                                {...getSuggestionItemProps(suggestion, {
+                                  style,
+                                })}
+                                className="p-2"
+                              >
+                                <span>{suggestion.description}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </PlacesAutocomplete>
                 {errors.state && (
                   <p className="mt-1 text-sm text-red-600">{errors.state}</p>
                 )}
               </div>
+            </div>
 
+            {/* Select Boxes Group */}
+            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+              {/* Bed */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Bed
@@ -418,7 +526,7 @@ const AddHotels = () => {
                     name="bed"
                     value={hotel.bed}
                     onChange={handleChange}
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 appearance-none bg-none"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="none">None</option>
                     <option value="1Bed">1 Bed</option>
@@ -428,6 +536,7 @@ const AddHotels = () => {
                 </div>
               </div>
 
+              {/* Room Type */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Room Type <span className="text-red-500">*</span>
@@ -452,6 +561,7 @@ const AddHotels = () => {
                 )}
               </div>
 
+              {/* WiFi Available */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   WiFi Available
@@ -472,6 +582,7 @@ const AddHotels = () => {
                 </div>
               </div>
 
+              {/* Furnished */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Furnished
@@ -486,70 +597,72 @@ const AddHotels = () => {
                   <option value="No">No</option>
                 </select>
               </div>
-
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Upload Images <span className="text-red-500">*</span>
-                </label>
-                <div
-                  className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 ${
-                    errors.images
-                      ? "border-red-300 border-dashed"
-                      : "border-gray-300 border-dashed"
-                  } rounded-lg`}
-                >
-                  <div className="space-y-1 text-center">
-                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                    <div className="flex text-sm text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
-                      >
-                        <span>Upload images</span>
-                        <input
-                          id="file-upload"
-                          name="images"
-                          type="file"
-                          multiple
-                          onChange={handleFileChange}
-                          className="sr-only"
-                        />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
-                  </div>
-                </div>
-                {errors.images && (
-                  <p className="mt-1 text-sm text-red-600">{errors.images}</p>
-                )}
-
-                {previewUrls.length > 0 && (
-                  <div className="mt-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">
-                      Selected Images:
-                    </h4>
-                    <div className="grid grid-cols-3 gap-4">
-                      {previewUrls.map((url, index) => (
-                        <div
-                          key={index}
-                          className="relative h-24 rounded-md overflow-hidden"
-                        >
-                          <img
-                            src={url}
-                            alt={`Preview ${index}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
 
+            {/* Upload Images */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Upload Images <span className="text-red-500">*</span>
+              </label>
+              <div
+                className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 ${
+                  errors.images
+                    ? "border-red-300 border-dashed"
+                    : "border-gray-300 border-dashed"
+                } rounded-lg`}
+              >
+                <div className="space-y-1 text-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
+                    <label
+                      htmlFor="file-upload"
+                      className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                    >
+                      <span>Upload images</span>
+                      <input
+                        id="file-upload"
+                        name="images"
+                        type="file"
+                        multiple
+                        onChange={handleFileChange}
+                        className="sr-only"
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
+                </div>
+              </div>
+              {errors.images && (
+                <p className="mt-1 text-sm text-red-600">{errors.images}</p>
+              )}
+
+              {previewUrls.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    Selected Images:
+                  </h4>
+                  <div className="grid grid-cols-3 gap-4">
+                    {previewUrls.map((url, index) => (
+                      <div
+                        key={index}
+                        className="relative h-24 rounded-md overflow-hidden"
+                      >
+                        <img
+                          src={url}
+                          alt={`Preview ${index}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Buttons */}
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <button
                 type="button"
