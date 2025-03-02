@@ -1,18 +1,14 @@
 import { useEffect, useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaWifi } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaWifi, FaRupeeSign, FaBed } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import { IoIosCall } from "react-icons/io";
+import { IoIosCall, IoIosHeart } from "react-icons/io";
 import { IoCallOutline } from "react-icons/io5";
-import { MdMeetingRoom } from "react-icons/md";
-import { FaIndianRupeeSign } from "react-icons/fa6";
+import { MdMeetingRoom, MdOutlineWifiOff } from "react-icons/md";
 import { RiSofaLine } from "react-icons/ri";
-import { MdOutlineWifiOff } from "react-icons/md";
-import { IoIosHeart } from "react-icons/io";
 import { TbShare3 } from "react-icons/tb";
-import { FaBed } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllHotels, findNearestHotels } from "../features/hotels/hotelsAPI";
+import { getAllHotels } from "../features/hotels/hotelsAPI";
 
 // Custom hook to check if the user is authenticated
 const useAuth = () => {
@@ -21,8 +17,13 @@ const useAuth = () => {
 
 const HotelList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { hotels, status, error } = useSelector((state) => state.hotels);
   const [currentIndexes, setCurrentIndexes] = useState({});
+  const [modalImage, setModalImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [favorites, setFavorites] = useState([]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const isAuthenticated = useAuth();
 
   // Fetch hotels when the component mounts
@@ -30,8 +31,8 @@ const HotelList = () => {
     dispatch(getAllHotels());
   }, [dispatch]);
 
+  // Initialize currentIndexes when hotels are loaded
   useEffect(() => {
-    // Initialize currentIndexes when hotels are loaded
     if (hotels && hotels.length > 0) {
       const initialIndexes = hotels.reduce((acc, hotel) => {
         acc[hotel._id] = 0;
@@ -55,233 +56,460 @@ const HotelList = () => {
     }));
   };
 
+  // Open modal with clicked image
+  const handleImageClick = (url) => {
+    setModalImage(url);
+    setShowModal(true);
+  };
+
+  // Toggle favorite
+  const toggleFavorite = (hotelId) => {
+    setFavorites(prev => 
+      prev.includes(hotelId) 
+        ? prev.filter(id => id !== hotelId)
+        : [...prev, hotelId]
+    );
+  };
+
+  // Handle contact owner click for non-authenticated users
+  const handleContactOwner = () => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+    }
+  };
+
+  // Navigate to login page
+  const goToLogin = () => {
+    setShowLoginModal(false);
+    navigate('/login');
+  };
+
   if (status === "loading") {
-    return <p>Loading hotels...</p>;
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   if (status === "failed") {
-    return <p>Error: {error}</p>;
+    return (
+      <div className="text-center py-8 px-4">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-2xl mx-auto">
+          <strong className="font-bold">Error: </strong>
+          <span className="block sm:inline">{error}</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <div className="hidden md:block mt-2 px-4">
-        <ul className="grid grid-cols-2 gap-3">
-          {hotels.map((hotel) => (
-            <li
-              key={hotel._id}
-              className="bg-white shadow-xl mb-0 p-4 h- flex flex-col sm:flex-row justify-start border items-center rounded-xl shadow"
-            >
-              {hotel.images && hotel.images.length > 0 ? (
-                <div className="overflow-hidden relative bg-black content-center rounded-3xl border border-black w-full sm:w-64 h-72 mb-4 sm:mb-0">
-                  <div
-                    className="flex transition-transform duration-500"
-                    style={{
-                      transform: `translateX(-${currentIndexes[hotel._id] * 100
-                        }%)`,
-                    }}
-                  >
-                    {hotel.images.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image?.url || "fallback-image.jpg"}
-                        alt={`Hotel ${index + 1}`}
-                        className="w-full sm:w-64 h-68 object-cover flex-shrink-0"
-                      />
-                    ))}
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-between p-2">
-                    <button
-                      className="p-1 rounded-full shadow bg-white opacity-80 text-gray-800 hover:bg-white"
-                      onClick={() => handlePrev(hotel._id, hotel.images.length)}
-                    >
-                      <FaChevronLeft size={20} />
-                    </button>
-                    <button
-                      className="p-1 rounded-full shadow bg-white opacity-80 text-gray-800 hover:bg-white"
-                      onClick={() => handleNext(hotel._id, hotel.images.length)}
-                    >
-                      <FaChevronRight size={20} />
-                    </button>
-                  </div>
-                  <div className="absolute bottom-4 right-0 left-0">
-                    <div className="flex items-center justify-center gap-1">
-                      {hotel.images.map((_, i) => (
-                        <div
-                          key={i}
-                          className={`transition-all w-3 h-3 rounded-full ${currentIndexes[hotel._id] === i
-                            ? "bg-white p-1"
-                            : "bg-white bg-opacity-50"
-                            }`}
-                        ></div>
-                      ))}
+    <>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Find Your Perfect Stay</h1>
+        
+        {/* Desktop view */}
+        <div className="hidden md:block">
+          <ul className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {hotels.map((hotel) => (
+              <li
+                key={hotel._id}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 border border-gray-200"
+              >
+                <div className="flex flex-col md:flex-row">
+                  {/* Image carousel */}
+                  {hotel.images && hotel.images.length > 0 ? (
+                    <div className="relative overflow-hidden w-full md:w-2/5 h-64">
+                      <div
+                        className="flex transition-transform duration-500 h-full"
+                        style={{
+                          transform: `translateX(-${currentIndexes[hotel._id] * 100}%)`,
+                        }}
+                      >
+                        {hotel.images.map((image, index) => (
+                          <img
+                            key={index}
+                            src={image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"}
+                            alt={`${hotel.name} - Image ${index + 1}`}
+                            className="w-full h-full object-cover flex-shrink-0 cursor-pointer"
+                            onClick={() => handleImageClick(image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80")}
+                          />
+                        ))}
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-between p-2">
+                        <button
+                          className="p-2 rounded-full shadow bg-white opacity-80 hover:opacity-100 hover:bg-white transition"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePrev(hotel._id, hotel.images.length);
+                          }}
+                        >
+                          <FaChevronLeft size={18} />
+                        </button>
+                        <button
+                          className="p-2 rounded-full shadow bg-white opacity-80 hover:opacity-100 hover:bg-white transition"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNext(hotel._id, hotel.images.length);
+                          }}
+                        >
+                          <FaChevronRight size={18} />
+                        </button>
+                      </div>
+                      <div className="absolute bottom-4 inset-x-0">
+                        <div className="flex items-center justify-center gap-1">
+                          {hotel.images.map((_, i) => (
+                            <div
+                              key={i}
+                              className={`w-2 h-2 rounded-full transition-all ${
+                                currentIndexes[hotel._id] === i ? "bg-white w-3 h-3" : "bg-white bg-opacity-60"
+                              }`}
+                            ></div>
+                          ))}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => toggleFavorite(hotel._id)}
+                        className={`absolute top-3 right-3 p-2 rounded-full ${
+                          favorites.includes(hotel._id) 
+                            ? "bg-red-500 text-white" 
+                            : "bg-white text-gray-700 hover:text-red-500"
+                        } shadow-md transition-colors`}
+                      >
+                        <IoIosHeart size={20} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-full md:w-2/5 h-64 bg-gray-200 flex items-center justify-center">
+                      <p className="text-gray-500">No images available</p>
+                    </div>
+                  )}
+                  
+                  {/* Hotel details */}
+                  <div className="p-6 flex flex-col justify-between w-full md:w-3/5">
+                    <div>
+                      <div className="flex justify-between items-start mb-4">
+                        <h3 className="text-2xl font-bold text-gray-800">{hotel.name}</h3>
+                        <div className="flex items-center text-2xl font-bold text-blue-600">
+                          <FaRupeeSign className="mr-1" />
+                          <span>{hotel.price.toLocaleString()}</span>
+                          <span className="text-sm text-gray-500 font-normal ml-1">/month</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-4 mb-6">
+                        <a
+                          className="flex items-center text-sm bg-blue-50 text-blue-700 rounded-full px-3 py-1 hover:bg-blue-100 transition"
+                          href={`https://www.google.com/maps?q=${hotel.location.coordinates[1]},${hotel.location.coordinates[0]}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FaLocationDot className="mr-1" /> 
+                          {hotel.address.address1}, {hotel.address.city}
+                        </a>
+                        <div className="flex items-center text-sm bg-gray-100 text-gray-700 rounded-full px-3 py-1">
+                          <MdMeetingRoom className="mr-1" /> {hotel.room}
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-4 gap-3 bg-gray-50 p-4 rounded-lg mb-4">
+                        <div className="flex flex-col items-center text-center">
+                          <MdMeetingRoom className="text-2xl text-gray-700 mb-1" />
+                          <p className="text-sm font-medium">{hotel.room}</p>
+                        </div>
+                        <div className="flex flex-col items-center text-center">
+                          <FaBed className="text-2xl text-gray-700 mb-1" />
+                          <p className="text-sm font-medium">{hotel.bed}</p>
+                        </div>
+                        <div className="flex flex-col items-center text-center">
+                          {hotel.wifi === "Yes" ? (
+                            <>
+                              <FaWifi className="text-2xl text-green-600 mb-1" />
+                              <p className="text-sm font-medium text-green-600">Available</p>
+                            </>
+                          ) : (
+                            <>
+                              <MdOutlineWifiOff className="text-2xl text-gray-500 mb-1" />
+                              <p className="text-sm font-medium text-gray-500">Not Available</p>
+                            </>
+                          )}
+                        </div>
+                        <div className="flex flex-col items-center text-center">
+                          <RiSofaLine className="text-2xl text-gray-700 mb-1" />
+                          <p className="text-sm font-medium">
+                            {hotel.furnished ? (
+                              <span className="text-green-600">Furnished</span>
+                            ) : (
+                              <span className="text-gray-500">Unfurnished</span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center mt-auto">
+                      {isAuthenticated ? (
+                        <a
+                          href={`tel:${hotel.phone}`}
+                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                        >
+                          <IoIosCall /> {hotel.phone}
+                        </a>
+                      ) : (
+                        <button
+                          onClick={handleContactOwner}
+                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                        >
+                          <IoCallOutline />
+                          Contact Owner
+                        </button>
+                      )}
+                      <button 
+                        className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition"
+                        title="Share"
+                      >
+                        <TbShare3 size={20} />
+                      </button>
                     </div>
                   </div>
                 </div>
-              ) : (
-                <p>No images available</p>
-              )}
-              <div className="sm:ml-10 flex flex-col w-full sm:w-auto">
-                <div className="pb-5 flex flex-row items-center  justify-between gap-">
-                  <div className="flex items-center font-bold text-2xl">
-                    <FaIndianRupeeSign />
-                    <p>{hotel.price}</p>
-                  </div>
-                  <h3 className="mb-2 font-semibold text-2xl">{hotel.name}</h3>
-                </div>
-                <div className="flex flex-col w-96 sm:flex-row gap-4 justify-between sm:gap-1 bg-slate-100 border border-black p-4 sm:p-5 rounded">
-                  <div className="flex flex-col items-center gap-1">
-                    <MdMeetingRoom className="text-xl sm:text-3xl" />
-                    <p className="text-slate-950 font-bold">{hotel.room}</p>
-                  </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <FaBed className="text-xl sm:text-3xl" />
-                    <p className="text-slate-950 font-bold">{hotel.bed}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
 
+        {/* Mobile responsive view */}
+        <div className="block md:hidden">
+          <div className="grid grid-cols-1 gap-6">
+            {hotels.map((hotel) => (
+              <div
+                key={hotel._id}
+                className="bg-white rounded-xl shadow-lg overflow-hidden"
+              >
+                {/* Image carousel */}
+                <div className="relative">
+                  {hotel.images && hotel.images.length > 0 ? (
+                    <div className="relative overflow-hidden w-full h-56">
+                      <div
+                        className="flex transition-transform duration-500 h-full"
+                        style={{
+                          transform: `translateX(-${currentIndexes[hotel._id] * 100}%)`,
+                        }}
+                      >
+                        {hotel.images.map((image, index) => (
+                          <img
+                            key={index}
+                            src={image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"}
+                            alt={`${hotel.name} - Image ${index + 1}`}
+                            className="w-full h-full object-cover flex-shrink-0 cursor-pointer"
+                            onClick={() => handleImageClick(image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80")}
+                          />
+                        ))}
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-between p-2">
+                        <button
+                          className="p-1.5 rounded-full shadow bg-white opacity-80 hover:opacity-100 hover:bg-white transition"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePrev(hotel._id, hotel.images.length);
+                          }}
+                        >
+                          <FaChevronLeft size={16} />
+                        </button>
+                        <button
+                          className="p-1.5 rounded-full shadow bg-white opacity-80 hover:opacity-100 hover:bg-white transition"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNext(hotel._id, hotel.images.length);
+                          }}
+                        >
+                          <FaChevronRight size={16} />
+                        </button>
+                      </div>
+                      <div className="absolute bottom-3 inset-x-0">
+                        <div className="flex items-center justify-center gap-1">
+                          {hotel.images.map((_, i) => (
+                            <div
+                              key={i}
+                              className={`w-1.5 h-1.5 rounded-full transition-all ${
+                                currentIndexes[hotel._id] === i ? "bg-white w-2.5 h-2.5" : "bg-white bg-opacity-60"
+                              }`}
+                            ></div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
+                      <p className="text-gray-500">No images available</p>
+                    </div>
+                  )}
+                  
+                  <button
+                    type="button"
+                    onClick={() => toggleFavorite(hotel._id)}
+                    className={`absolute top-3 right-3 p-2 rounded-full ${
+                      favorites.includes(hotel._id) 
+                        ? "bg-red-500 text-white" 
+                        : "bg-white text-gray-700 hover:text-red-500"
+                    } shadow-md transition-colors`}
+                  >
+                    <IoIosHeart size={18} />
+                  </button>
+                </div>
+                
+                {/* Hotel details */}
+                <div className="p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-bold text-gray-800">{hotel.name}</h3>
+                    <div className="flex items-center text-xl font-bold text-blue-600">
+                      <FaRupeeSign className="mr-0.5" />
+                      <span>{hotel.price.toLocaleString()}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex flex-col">
-                      <p className="text-slate-950 font-bold">
-                        {hotel.wifi === "Yes" ? (
-                          <span className="flex flex-col items-center text-slate-950 font-bold"><FaWifi className="text-xl sm:text-3xl" />{hotel.wifi}</span>
+                  
+                  <a
+                    className="inline-flex items-center text-xs bg-blue-50 text-blue-700 rounded-full px-2 py-1 mb-3"
+                    href={`https://www.google.com/maps?q=${hotel.location.coordinates[1]},${hotel.location.coordinates[0]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaLocationDot className="mr-1" size={12} /> 
+                    {hotel.address.address1}, {hotel.address.city}
+                  </a>
+                  
+                  <div className="grid grid-cols-4 gap-2 bg-gray-50 p-3 rounded-lg mb-4 text-center">
+                    <div className="flex flex-col items-center">
+                      <MdMeetingRoom className="text-lg text-gray-700" />
+                      <p className="text-xs font-medium mt-1">{hotel.room}</p>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <FaBed className="text-lg text-gray-700" />
+                      <p className="text-xs font-medium mt-1">{hotel.bed}</p>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      {hotel.wifi === "Yes" ? (
+                        <>
+                          <FaWifi className="text-lg text-green-600" />
+                          <p className="text-xs font-medium mt-1 text-green-600">WiFi</p>
+                        </>
+                      ) : (
+                        <>
+                          <MdOutlineWifiOff className="text-lg text-gray-500" />
+                          <p className="text-xs font-medium mt-1 text-gray-500">No WiFi</p>
+                        </>
+                      )}
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <RiSofaLine className="text-lg text-gray-700" />
+                      <p className="text-xs font-medium mt-1">
+                        {hotel.furnished ? (
+                          <span className="text-green-600">Furnished</span>
                         ) : (
-                          <span className="flex flex-col items-center text-slate-950 font-bold"><MdOutlineWifiOff className="text-xl sm:text-3xl" />{hotel.wifi}</span>
+                          <span className="text-gray-500">Unfurnished</span>
                         )}
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-col items-center ">
-                    <RiSofaLine className="text-xl sm:text-3xl gap-1" />
-                    <p className="text-slate-950 font-bold">
-                      {hotel.furnished ? "Yes" : "No"}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-3">
-                  <div className="w-40">
-                    <a
-                      className="font-semibold flex items-center bg-white p-2 border border-blue-950 rounded-full text-blue-950 gap-1"
-                      href={`https://www.google.com/maps?q=${hotel.location.coordinates[1]},${hotel.location.coordinates[0]}`}
-                    >
-                      <FaLocationDot /> {hotel.address.address1}
-                    </a>
-                  </div>
-                  <div className="ml-10 mt-2 flex flex-col sm:flex-row gap-4 sm:gap-10">
+                  
+                  <div className="flex justify-between items-center">
                     {isAuthenticated ? (
-                      <button className="flex items-center gap-1 p-2 border border-blue-500 bg-blue-300 rounded-3xl">
-                        <IoIosCall /> {hotel.phone}
-                      </button>
-                    ) : (
-                      <Link
-                        to="/login"
-                        className="flex items-center gap-1 p-2 border border-blue-500 bg-blue-300 rounded-3xl"
+                      <a
+                        href={`tel:${hotel.phone}`}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
                       >
-                        <IoCallOutline />
-                        Call to Owner
-                      </Link>
+                        <IoIosCall size={16} /> {hotel.phone}
+                      </a>
+                    ) : (
+                      <button
+                        onClick={handleContactOwner}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
+                      >
+                        <IoCallOutline size={16} />
+                        Contact Owner
+                      </button>
                     )}
+                    <button 
+                      className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition"
+                      title="Share"
+                    >
+                      <TbShare3 size={18} />
+                    </button>
                   </div>
                 </div>
               </div>
-            </li>
-          ))}
-        </ul>
-
+            ))}
+          </div>
+        </div>
       </div>
-      {/* modile responsive  */}
-      <div className="block lg:hidden px-4 mt-4 mb-16">
-        {hotels.map((hotel) => (
+
+      {/* Enlarged Image Modal */}
+      {showModal && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50"
+          onClick={() => setShowModal(false)}
+        >
           <div
-            key={hotel._id}
-            className="relative bg-gray-200 border border-blue-950 rounded-3xl w-full max-w-sm mx-auto mb-6"
+            className="relative max-w-4xl w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
           >
-            {hotel.images && hotel.images.length > 0 ? (
-              <div className="overflow-hidden relative w-full h-44">
-                <div
-                  className="flex transition-transform duration-500"
-                  style={{
-                    transform: `translateX(-${currentIndexes[hotel._id] * 100}%)`,
-                  }}
-                >
-                  {hotel.images.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image?.url || "fallback-image.jpg"}
-                      alt={`Hotel ${index + 1}`}
-                      className="w-full h-44 object-cover flex-shrink-0 rounded-t-3xl"
-                    />
-                  ))}
-                </div>
-                <div className="absolute inset-0 flex items-center justify-between px-2">
-                  <button
-                    className="p-1 rounded-full shadow bg-white opacity-80 text-gray-800 hover:bg-white"
-                    onClick={() => handlePrev(hotel._id, hotel.images.length)}
-                  >
-                    <FaChevronLeft size={20} />
-                  </button>
-                  <button
-                    className="p-1 rounded-full shadow bg-white opacity-80 text-gray-800 hover:bg-white"
-                    onClick={() => handleNext(hotel._id, hotel.images.length)}
-                  >
-                    <FaChevronRight size={20} />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <p>No images available</p>
-            )}
+            <img
+              src={modalImage || ""}
+              alt="Enlarged view"
+              className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+            />
             <button
-              type="button"
-              className="text-red-600 absolute top-3 right-3 p-1 text-2xl bg-white rounded-full border-blue-950"
+              onClick={() => setShowModal(false)}
+              className="absolute top-2 right-2 text-white text-3xl bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-80 transition"
             >
-              <IoIosHeart />
+              &times;
             </button>
-            <div className="flex justify-between items-center p-2">
-              <p className="flex items-center font-bold text-xl">
-                <FaIndianRupeeSign /> {hotel.price}
-              </p>
-              <h3 className="font-semibold">{hotel.name}</h3>
-            </div>
-            <div className="flex justify-between p-2 border-t">
-              <p className="text-sm flex flex-col items-center">
-                <MdMeetingRoom className="text-xl" /> <span>{hotel.room}</span>
-              </p>
-              <p className="text-sm flex flex-col items-center">
-                <FaBed className="text-xl" /> {hotel.bed}
-              </p>
-              <p className="text-sm flex flex-col items-center">
-                {hotel.wifi === "Yes" ? (
-                  <FaWifi className="text-xl sm:text-3xl" />
-                ) : (
-                  <MdOutlineWifiOff className="text-xl sm:text-3xl" />
-                )}
-              </p>
-              <p className="text-sm flex flex-col items-center">
-                <RiSofaLine className="text-xl" /> Yes
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 justify-between p-3">
-              <a
-                className="flex items-center w-fit bg-white border border-blue-950 text-blue-950 rounded-full px-3 py-1 text-sm"
-                href={`https://www.google.com/maps?q=${hotel.location.coordinates[1]},${hotel.location.coordinates[0]}`}
-              >
-                <FaLocationDot />
-                {hotel.address.address1}
-              </a>
-              <div className="flex justify-between">
-                <button className="flex items-center w-fit bg-white border border-blue-950 text-blue-950 rounded-3xl px-3 py-1">
-                  <IoIosCall /> {hotel.phone}
-                </button>
-                <button className="bg-white rounded-full border border-blue-950 p-2">
-                  <TbShare3 />
-                </button>
+          </div>
+        </div>
+      )}
+
+      {/* Login Required Modal */}
+      {showLoginModal && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          onClick={() => setShowLoginModal(false)}
+        >
+          <div
+            className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center mb-4">
+              <div className="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <IoCallOutline size={32} />
               </div>
+              <h3 className="text-xl font-bold text-gray-800">Login Required</h3>
+            </div>
+            
+            <p className="text-gray-600 mb-6 text-center">
+              You need to be logged in to view contact information of property owners.
+              Please log in to continue.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
+              <button
+                onClick={() => setShowLoginModal(false)}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={goToLogin}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center"
+              >
+                <IoIosCall className="mr-2" />
+                Login to See Contact
+              </button>
             </div>
           </div>
-        ))}
-      </div>
-
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
