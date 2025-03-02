@@ -85,9 +85,9 @@ const HotelList = () => {
   };
 
   const handleShare = (hotelId) => {
-    const url = `${window.location.origin}/hotels/${hotelId}`;
-    const title = "Check out this amazing hotel!";
-    const text = "I found an amazing hotel on [Your Website Name]!";
+    const url = `${window.location.origin}/hotels/`;
+    const title = "Check out this amazing Room For Rent!";
+    const text = "I found an amazing hotel on Licxo !";
 
     if (navigator.share) {
       navigator.share({
