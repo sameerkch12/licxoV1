@@ -84,6 +84,29 @@ const HotelList = () => {
     navigate('/login');
   };
 
+  const handleShare = (hotelId) => {
+    const url = `${window.location.origin}/hotels/${hotelId}`;
+    const title = "Check out this amazing hotel!";
+    const text = "I found an amazing hotel on [Your Website Name]!";
+
+    if (navigator.share) {
+      navigator.share({
+        title,
+        text,
+        url,
+      })
+      .then(() => console.log("Shared successfully"))
+      .catch((error) => console.error("Error sharing:", error));
+    } else {
+      // Fallback for older browsers
+      const shareLink = document.createElement("a");
+      shareLink.href = url;
+      shareLink.target = "_blank";
+      shareLink.rel = "noopener noreferrer";
+      shareLink.click();
+    }
+  };
+
   if (status === "loading") {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
@@ -268,6 +291,7 @@ const HotelList = () => {
                       <button 
                         className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition"
                         title="Share"
+                        onClick={() => handleShare(hotel._id)}
                       >
                         <TbShare3 size={20} />
                       </button>
@@ -433,6 +457,7 @@ const HotelList = () => {
                     <button 
                       className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition"
                       title="Share"
+                      onClick={() => handleShare(hotel._id)}
                     >
                       <TbShare3 size={18} />
                     </button>
