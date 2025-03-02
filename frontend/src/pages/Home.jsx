@@ -8,11 +8,15 @@ import SearchFilterDistrict from "../components/SearchFilterDistrict"
 const Home = () => {
   return (
     <div>
-        <Navbar/>
-       <SearchFilterDistrict/>
-        <HotelList/>
-        <NavigationBar />
-        <Footer/>
+      <Navbar />
+      <SearchFilterDistrict />
+      <HotelList />
+      <NavigationBar />
+
+      <footer className="bg-gray-900 text-white pb-20">
+        <Footer />
+      </footer>
+
     </div>
   )
 }
