@@ -85,7 +85,7 @@ const HotelList = () => {
   };
 
   const handleShare = (hotelId) => {
-    const url = `${window.location.origin}/hotels/`;
+    const url = `${window.location.origin}`;
     const title = "Check out this amazing Room For Rent!";
     const text = "I found an amazing hotel on Licxo !";
 
