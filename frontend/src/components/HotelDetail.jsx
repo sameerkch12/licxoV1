@@ -16,6 +16,7 @@ import { IoCallOutline } from "react-icons/io5"
 import { MdMeetingRoom, MdOutlineWifiOff } from "react-icons/md"
 import { RiSofaLine } from "react-icons/ri"
 import { TbShare3 } from "react-icons/tb"
+import Navbar from "./Navbar"
 
 // Custom hook to check if the user is authenticated
 const useAuth = () => {
@@ -131,12 +132,14 @@ const HotelDetail = () => {
 
   return (
     <>
+     <Navbar/>
       <div className="container mx-auto px-4 py-8">
+       
         <button
           onClick={goBack}
-          className="mb-6 flex items-center text-blue-600 hover:text-blue-800 transition"
+          className="mb-5 mt-8 flex items-center text-blue-600 hover:text-blue-800 transition"
         >
-          <FaArrowLeft className="mr-2" /> Back to listings
+          <FaArrowLeft className="mr-2" /> Back to Home
         </button>
 
         <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
