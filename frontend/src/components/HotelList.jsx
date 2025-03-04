@@ -137,8 +137,11 @@ const HotelList = () => {
   return (
     <>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Find Your Perfect Stay</h1>
-        
+     <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 text-center">
+  Find Your <span className="text-red-500 italic">Perfect</span> Stay
+</h1>
+
+         
         {/* Desktop view */}
         <div className="hidden md:block">
           <ul className="grid grid-cols-1 lg:grid-cols-2 gap-8">
