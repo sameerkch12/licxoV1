@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 app.use("/api/v1/hotels", hotelRoute);
 app.use("/api/v1/user", userRoute);
 
+
 // Default route
 app.get('/', (req, res) => {
     res.send('Hello World!');
@@ -40,6 +41,7 @@ app.listen(PORT, () => {
 });
 
 // Keep the server awake on Render
+
 setInterval(() => {
     https.get('https://licxov1-poan.onrender.com', (res) => {
       console.log(`Server hit with status code: ${res.statusCode}`);

@@ -1,3 +1,4 @@
+const Hotels = require("../models/hotelModel");
 const hotelService = require("../services/hotelService");
 
 const createHotel = async (req, res) => {
@@ -37,6 +38,7 @@ const createHotel = async (req, res) => {
 const getAllHotels = async (req, res) => {
   try {
     const hotels = await hotelService.getAllHotels();
+    
     res.status(200).json(hotels);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving hotels", error });
@@ -98,6 +100,18 @@ const getOneHotel = async (req, res) => {
   }
 };
 
+const getOneHotelDetail = async( req , res) =>{
+  try {
+    const { id } = req.params;
+    const hotel = await Hotels.findById(id); // Assuming MongoDB/Mongoose
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+    res.json(hotel);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+}
 
 const updateHotel = async (req, res) => {
   const { phone } = req.params;
@@ -131,4 +145,5 @@ module.exports = {
   filterHotels,
   updateHotel,
   deleteHotel,
+  getOneHotelDetail,
 };

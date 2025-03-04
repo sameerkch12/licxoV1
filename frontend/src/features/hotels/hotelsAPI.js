@@ -44,6 +44,7 @@ export const getAllHotels = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/api/v1/hotels/hotels`); // Correct endpoint
+      console.log("sameer", response)
       return response.data; // Assuming response.data contains the hotels array
     } catch (error) {
       console.error("Error fetching hotels:", error);
@@ -57,6 +58,7 @@ export const getAllHotels = createAsyncThunk(
 export const findNearestHotels = createAsyncThunk(
   'hotels/findNearestHotels',
   async (locationData, { rejectWithValue }) => {
+    console.log("Sending request with locationData:", locationData);
     try {
       const response = await axios.post(`${API_URL}/api/v1/hotels/find-nearest`, locationData, {
         headers: {
@@ -120,6 +122,14 @@ export const deleteHotel = createAsyncThunk('hotels/delete', async (phone, { rej
 
 
 
-
-
-
+export const getHotelById = createAsyncThunk(
+  "hotels/getHotelById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/v1/hotels/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);

@@ -62,8 +62,14 @@ const HotelList = () => {
     setShowModal(true);
   };
 
+  // Navigate to hotel detail page
+  const goToHotelDetail = (hotelId) => {
+    navigate(`/hotel/${hotelId}`);
+  };
+
   // Toggle favorite
-  const toggleFavorite = (hotelId) => {
+  const toggleFavorite = (hotelId, e) => {
+    e.stopPropagation();
     setFavorites(prev => 
       prev.includes(hotelId) 
         ? prev.filter(id => id !== hotelId)
@@ -72,7 +78,8 @@ const HotelList = () => {
   };
 
   // Handle contact owner click for non-authenticated users
-  const handleContactOwner = () => {
+  const handleContactOwner = (e) => {
+    e.stopPropagation();
     if (!isAuthenticated) {
       setShowLoginModal(true);
     }
@@ -84,10 +91,11 @@ const HotelList = () => {
     navigate('/login');
   };
 
-  const handleShare = (hotelId) => {
-    const url = `${window.location.origin}`;
+  const handleShare = (hotelId, e) => {
+    e.stopPropagation();
+    const url = `${window.location.origin}/hotel/${hotelId}`;
     const title = "Check out this amazing Room For Rent!";
-    const text = "I found an amazing hotel on Licxo !";
+    const text = "I found an amazing hotel on Licxo!";
 
     if (navigator.share) {
       navigator.share({
@@ -137,7 +145,8 @@ const HotelList = () => {
             {hotels.map((hotel) => (
               <li
                 key={hotel._id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 border border-gray-200"
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 border border-gray-200 cursor-pointer"
+                onClick={() => goToHotelDetail(hotel._id)}
               >
                 <div className="flex flex-col md:flex-row">
                   {/* Image carousel */}
@@ -155,7 +164,10 @@ const HotelList = () => {
                             src={image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"}
                             alt={`${hotel.name} - Image ${index + 1}`}
                             className="w-full h-full object-cover flex-shrink-0 cursor-pointer"
-                            onClick={() => handleImageClick(image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80")}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleImageClick(image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80");
+                            }}
                           />
                         ))}
                       </div>
@@ -193,7 +205,7 @@ const HotelList = () => {
                       </div>
                       <button
                         type="button"
-                        onClick={() => toggleFavorite(hotel._id)}
+                        onClick={(e) => toggleFavorite(hotel._id, e)}
                         className={`absolute top-3 right-3 p-2 rounded-full ${
                           favorites.includes(hotel._id) 
                             ? "bg-red-500 text-white" 
@@ -227,6 +239,7 @@ const HotelList = () => {
                           href={`https://www.google.com/maps?q=${hotel.location.coordinates[1]},${hotel.location.coordinates[0]}`}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <FaLocationDot className="mr-1" /> 
                           {hotel.address.address1}, {hotel.address.city}
@@ -276,12 +289,13 @@ const HotelList = () => {
                         <a
                           href={`tel:${hotel.phone}`}
                           className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <IoIosCall /> {hotel.phone}
                         </a>
                       ) : (
                         <button
-                          onClick={handleContactOwner}
+                          onClick={(e) => handleContactOwner(e)}
                           className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                         >
                           <IoCallOutline />
@@ -291,7 +305,7 @@ const HotelList = () => {
                       <button 
                         className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition"
                         title="Share"
-                        onClick={() => handleShare(hotel._id)}
+                        onClick={(e) => handleShare(hotel._id, e)}
                       >
                         <TbShare3 size={20} />
                       </button>
@@ -309,7 +323,8 @@ const HotelList = () => {
             {hotels.map((hotel) => (
               <div
                 key={hotel._id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden"
+                className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer"
+                onClick={() => goToHotelDetail(hotel._id)}
               >
                 {/* Image carousel */}
                 <div className="relative">
@@ -327,7 +342,10 @@ const HotelList = () => {
                             src={image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"}
                             alt={`${hotel.name} - Image ${index + 1}`}
                             className="w-full h-full object-cover flex-shrink-0 cursor-pointer"
-                            onClick={() => handleImageClick(image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80")}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleImageClick(image?.url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80");
+                            }}
                           />
                         ))}
                       </div>
@@ -372,7 +390,7 @@ const HotelList = () => {
                   
                   <button
                     type="button"
-                    onClick={() => toggleFavorite(hotel._id)}
+                    onClick={(e) => toggleFavorite(hotel._id, e)}
                     className={`absolute top-3 right-3 p-2 rounded-full ${
                       favorites.includes(hotel._id) 
                         ? "bg-red-500 text-white" 
@@ -398,6 +416,7 @@ const HotelList = () => {
                     href={`https://www.google.com/maps?q=${hotel.location.coordinates[1]},${hotel.location.coordinates[0]}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <FaLocationDot className="mr-1" size={12} /> 
                     {hotel.address.address1}, {hotel.address.city}
@@ -442,12 +461,13 @@ const HotelList = () => {
                       <a
                         href={`tel:${hotel.phone}`}
                         className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <IoIosCall size={16} /> {hotel.phone}
                       </a>
                     ) : (
                       <button
-                        onClick={handleContactOwner}
+                        onClick={(e) => handleContactOwner(e)}
                         className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
                       >
                         <IoCallOutline size={16} />
@@ -457,7 +477,7 @@ const HotelList = () => {
                     <button 
                       className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition"
                       title="Share"
-                      onClick={() => handleShare(hotel._id)}
+                      onClick={(e) => handleShare(hotel._id, e)}
                     >
                       <TbShare3 size={18} />
                     </button>

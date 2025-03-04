@@ -7,6 +7,7 @@ import {
   getOneHotel,
   updateHotel,
   deleteHotel,
+  getHotelById,
 } from "./hotelsAPI";
 const initialState = {
   hotels: [],
@@ -123,7 +124,21 @@ const hotelSlice = createSlice({
       .addCase(deleteHotel.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      
+      
+      .addCase(getHotelById.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getHotelById.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentHotel = action.payload;
+      })
+      .addCase(getHotelById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
+    
   },
 });
 
