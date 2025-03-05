@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { MapPin, Search, X } from "lucide-react";
 import { filterHotels, findNearestHotels } from "../features/hotels/hotelsAPI";
+import GooglePlacesAutocomplete from "./GooglePlacesAutocomplete";
 
 const SearchFilterDistrict = () => {
   const [locationStatus, setLocationStatus] = useState("");
@@ -27,10 +28,7 @@ const SearchFilterDistrict = () => {
 
           setSearchParams((prev) => ({
             ...prev,
-            location: {
-              latitude,
-              longitude,
-            },
+            location: { latitude, longitude },
           }));
 
           // Reverse geocoding API call using OpenStreetMap Nominatim
@@ -39,7 +37,6 @@ const SearchFilterDistrict = () => {
           )
             .then((response) => response.json())
             .then((data) => {
-              // Extract city/town/village from response
               const address = data.address || {};
               const city = address.city || address.town || address.village || "";
               console.log("Reverse geocoding result:", data);
@@ -65,10 +62,7 @@ const SearchFilterDistrict = () => {
     setLocationStatus("");
     setSearchParams((prev) => ({
       ...prev,
-      location: {
-        latitude: null,
-        longitude: null,
-      },
+      location: { latitude: null, longitude: null },
     }));
     setSearchQuery("");
   };
@@ -104,14 +98,23 @@ const SearchFilterDistrict = () => {
                   Destination
                 </label>
                 <div className="relative flex items-center">
-                  <input
-                    type="text"
-                    placeholder="Search for city, location or hotel"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
                   <Search className="absolute left-3 text-gray-400" size={18} />
+                  <div className="w-full">
+                    <GooglePlacesAutocomplete
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                      setSearchParams={setSearchParams}
+                    />
+                  </div>
+
+                  {searchQuery && (
+                    <button
+                      onClick={clearLocation}
+                      className="absolute right-3 text-gray-500 hover:text-gray-700"
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
 
                   {locationStatus ? (
                     <div className="absolute right-3 flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-xs">
@@ -156,8 +159,6 @@ const SearchFilterDistrict = () => {
           <h2 className="text-2xl font-bold text-center mt-12 mb-4 text-white">
             Find Your Perfect Room
           </h2>
-          
-          
 
           <div className="bg-white rounded-xl shadow-xl p-4 border border-blue-200">
             <div className="mb-4 relative">
@@ -165,14 +166,23 @@ const SearchFilterDistrict = () => {
                 Destination
               </label>
               <div className="relative flex items-center">
-                <input
-                  type="text"
-                  placeholder="Search for city, location or hotel"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
                 <Search className="absolute left-3 text-gray-400" size={18} />
+                <div className="w-full">
+                  <GooglePlacesAutocomplete
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    setSearchParams={setSearchParams}
+                  />
+                </div>
+
+                {searchQuery && (
+                  <button
+                    onClick={clearLocation}
+                    className="absolute right-3 text-gray-500 hover:text-gray-700"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
 
                 {locationStatus ? (
                   <div className="absolute right-3 flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-xs">
