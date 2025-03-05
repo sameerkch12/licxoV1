@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { FilterButton } from "./FilterButton"
 import { FilterContent } from "./FilterContent"
-import { useDispatch, useSelector } from "react-redux";
-import { filterHotels} from "../features/hotels/hotelsAPI";
+import { useDispatch } from "react-redux";
+import { filterHotels } from "../features/hotels/hotelsAPI";
 
 export const HotelFilter = () => {
   const dispatch = useDispatch();
@@ -12,6 +12,9 @@ export const HotelFilter = () => {
     furnished: null,
     wifi: null
   })
+
+  // Check if any filters are active
+  const hasActiveFilters = filters.roomType.length > 0 || filters.furnished || filters.wifi;
 
   const handleFilterChange = newFilters => {
     setFilters(prev => ({ ...prev, ...newFilters }))
@@ -28,24 +31,27 @@ export const HotelFilter = () => {
   }
 
   const applyFilters = () => {
-    // Here you would typically dispatch your filter action
-    
-     // Convert filters to API format
-     const apiFilters = {
-  
+    const apiFilters = {
       room: filters.roomType.join(','),
       wifi: filters.wifi ? 'Yes' : undefined,
       furnished: filters.furnished || undefined,
     };
 
-    // Dispatch the filter action
+    // Remove empty filters
+    Object.keys(apiFilters).forEach(key => 
+      !apiFilters[key] && delete apiFilters[key]
+    );
+
     dispatch(filterHotels(apiFilters));
     setIsOpen(false);
   }
 
   return (
-    <div className="relative flex justify-end ">
-      <FilterButton onClick={() => setIsOpen(!isOpen)} />
+    <div className="relative">
+      <FilterButton 
+        onClick={() => setIsOpen(!isOpen)} 
+        hasActiveFilters={hasActiveFilters}
+      />
       {isOpen && (
         <FilterContent
           filters={filters}
