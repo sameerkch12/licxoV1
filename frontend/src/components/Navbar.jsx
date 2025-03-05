@@ -99,7 +99,7 @@ function Navbar() {
               </li>
               <li>
                 <button
-                  onClick={() => navigate("/addroom")}
+                  onClick={() => navigate("/addhotel")}
                   className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
                 >
                   <PlusCircle className="mr-2 h-5 w-5" /> Add Your Room
