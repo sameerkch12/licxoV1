@@ -1,9 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { IoReorderThree } from "react-icons/io5";
-import { FaCommentDots, FaHome, FaPhone } from "react-icons/fa";
-import logo from "../assets/Licxo.jpg";
+import { Home, PlusCircle, Phone, MessageSquare, User, Hotel, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from "../assets/LicxoLogo.png"
 
 const useAuth = () => {
   return !!localStorage.getItem("token");
@@ -13,7 +11,7 @@ const getUsername = () => {
   return localStorage.getItem("username") || "";
 };
 
-const Navbar = () => {
+function Navbar() {
   const navigate = useNavigate();
   const isAuthenticated = useAuth();
   const username = isAuthenticated ? getUsername() : "";
@@ -44,7 +42,7 @@ const Navbar = () => {
               onClick={() => navigate("/addhotel")}
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
             >
-              <IoMdAddCircleOutline className="mr-1 text-xl" />
+              <PlusCircle className="mr-1 h-5 w-5" />
               Add Listing
             </button>
           ) : (
@@ -52,7 +50,7 @@ const Navbar = () => {
               onClick={handleLogin}
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
             >
-              <IoMdAddCircleOutline className="mr-1 text-xl" />
+              <PlusCircle className="mr-1 h-5 w-5" />
               Sign up
             </button>
           )}
@@ -63,9 +61,9 @@ const Navbar = () => {
       <div className="fixed top-0 left-0 w-full h-14 bg-white border-b flex items-center justify-center z-10 lg:hidden px-4">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="absolute left-4 text-black text-5xl"
+          className="absolute left-4 text-black"
         >
-          <IoReorderThree />
+          <Menu className="h-8 w-8" />
         </button>
         <img src={logo} alt="logo" className="h-12" />
       </div>
@@ -76,9 +74,9 @@ const Navbar = () => {
           <div>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="text-black text-lg font-semibold px-3 py-1 rounded-md hover:bg-gray-200 transition"
+              className="text-black text-lg font-semibold px-3 py-1 rounded-md hover:bg-gray-200 transition flex items-center"
             >
-              ✖ Close
+              <X className="h-5 w-5 mr-1" /> Close
             </button>
             <ul className="mt-6 space-y-4">
               {!isAuthenticated && (
@@ -92,40 +90,56 @@ const Navbar = () => {
                 </li>
               )}
               <li>
-                <Link
-                  to="/"
+                <button
+                  onClick={() => navigate("/")}
                   className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
-                  onClick={() => setSidebarOpen(false)}
                 >
-                  <FaHome className="mr-2 text-xl" /> Home Page
-                </Link>
+                  <Home className="mr-2 h-5 w-5" /> Home Page
+                </button>
               </li>
               <li>
-                <Link
-                  to="/addroom"
+                <button
+                  onClick={() => navigate("/addroom")}
                   className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
-                  onClick={() => setSidebarOpen(false)}
                 >
-                  <IoMdAddCircleOutline className="mr-2 text-xl" /> Add Your Room
-                </Link>
+                  <PlusCircle className="mr-2 h-5 w-5" /> Add Your Room
+                </button>
+              </li>
+              {isAuthenticated && (
+                <>
+                  <li>
+                    <button
+                      onClick={() => navigate("/myrooms")}
+                      className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
+                    >
+                      <Hotel className="mr-2 h-5 w-5" /> My Rooms
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => navigate("/profile")}
+                      className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
+                    >
+                      <User className="mr-2 h-5 w-5" /> Profile
+                    </button>
+                  </li>
+                </>
+              )}
+              <li>
+                <button
+                  onClick={() => navigate("/contact")}
+                  className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
+                >
+                  <Phone className="mr-2 h-5 w-5" /> Contact Us
+                </button>
               </li>
               <li>
-                <Link
-                  to="/contact"
+                <button
+                  onClick={() => navigate("/feedback")}
                   className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
-                  onClick={() => setSidebarOpen(false)}
                 >
-                  <FaPhone className="mr-2 text-xl" /> Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/feedback"
-                  className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <FaCommentDots className="mr-2" /> Feedback
-                </Link>
+                  <MessageSquare className="mr-2 h-5 w-5" /> Feedback
+                </button>
               </li>
             </ul>
           </div>
@@ -141,6 +155,6 @@ const Navbar = () => {
       )}
     </div>
   );
-};
+}
 
 export default Navbar;

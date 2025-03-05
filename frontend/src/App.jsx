@@ -9,6 +9,7 @@ import About from './pages/About'
 import Properties from './pages/Properties'
 import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
+import Myrooms from './pages/Myrooms'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/myrooms' element={<Myrooms />} />
           <Route path="/about" element={<About />} />
           <Route path='/login' element={<Login />} />
           <Route path="/properties" element={<Properties />} />
