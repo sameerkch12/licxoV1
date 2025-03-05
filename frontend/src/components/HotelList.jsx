@@ -9,6 +9,7 @@ import { TbShare3 } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllHotels } from "../features/hotels/hotelsAPI";
+import { HotelFilter } from "./HotelFilter";
 
 // Custom hook to check if the user is authenticated
 const useAuth = () => {
@@ -70,8 +71,8 @@ const HotelList = () => {
   // Toggle favorite
   const toggleFavorite = (hotelId, e) => {
     e.stopPropagation();
-    setFavorites(prev => 
-      prev.includes(hotelId) 
+    setFavorites(prev =>
+      prev.includes(hotelId)
         ? prev.filter(id => id !== hotelId)
         : [...prev, hotelId]
     );
@@ -103,8 +104,8 @@ const HotelList = () => {
         text,
         url,
       })
-      .then(() => console.log("Shared successfully"))
-      .catch((error) => console.error("Error sharing:", error));
+        .then(() => console.log("Shared successfully"))
+        .catch((error) => console.error("Error sharing:", error));
     } else {
       // Fallback for older browsers
       const shareLink = document.createElement("a");
@@ -136,12 +137,15 @@ const HotelList = () => {
 
   return (
     <>
+   
       <div className="container mx-auto px-4 py-8">
-     <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 text-center">
-  Find Your <span className="text-red-500 italic">Perfect</span> Stay
-</h1>
+        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 text-center">
+          Find Your <span className="text-red-500 italic">Perfect</span> Stay
+        </h1>
+        <div className="mb-4 " >
+    <HotelFilter />
+    </div>
 
-         
         {/* Desktop view */}
         <div className="hidden md:block">
           <ul className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -199,9 +203,8 @@ const HotelList = () => {
                           {hotel.images.map((_, i) => (
                             <div
                               key={i}
-                              className={`w-2 h-2 rounded-full transition-all ${
-                                currentIndexes[hotel._id] === i ? "bg-white w-3 h-3" : "bg-white bg-opacity-60"
-                              }`}
+                              className={`w-2 h-2 rounded-full transition-all ${currentIndexes[hotel._id] === i ? "bg-white w-3 h-3" : "bg-white bg-opacity-60"
+                                }`}
                             ></div>
                           ))}
                         </div>
@@ -209,11 +212,10 @@ const HotelList = () => {
                       <button
                         type="button"
                         onClick={(e) => toggleFavorite(hotel._id, e)}
-                        className={`absolute top-3 right-3 p-2 rounded-full ${
-                          favorites.includes(hotel._id) 
-                            ? "bg-red-500 text-white" 
+                        className={`absolute top-3 right-3 p-2 rounded-full ${favorites.includes(hotel._id)
+                            ? "bg-red-500 text-white"
                             : "bg-white text-gray-700 hover:text-red-500"
-                        } shadow-md transition-colors`}
+                          } shadow-md transition-colors`}
                       >
                         <IoIosHeart size={20} />
                       </button>
@@ -223,7 +225,7 @@ const HotelList = () => {
                       <p className="text-gray-500">No images available</p>
                     </div>
                   )}
-                  
+
                   {/* Hotel details */}
                   <div className="p-6 flex flex-col justify-between w-full md:w-3/5">
                     <div>
@@ -235,7 +237,7 @@ const HotelList = () => {
                           <span className="text-sm text-gray-500 font-normal ml-1">/month</span>
                         </div>
                       </div>
-                      
+
                       <div className="flex flex-wrap gap-4 mb-6">
                         <a
                           className="flex items-center text-sm bg-blue-50 text-blue-700 rounded-full px-3 py-1 hover:bg-blue-100 transition"
@@ -244,14 +246,14 @@ const HotelList = () => {
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <FaLocationDot className="mr-1" /> 
+                          <FaLocationDot className="mr-1" />
                           {hotel.address.address1}, {hotel.address.city}
                         </a>
                         <div className="flex items-center text-sm bg-gray-100 text-gray-700 rounded-full px-3 py-1">
                           <MdMeetingRoom className="mr-1" /> {hotel.room}
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-4 gap-3 bg-gray-50 p-4 rounded-lg mb-4">
                         <div className="flex flex-col items-center text-center">
                           <MdMeetingRoom className="text-2xl text-gray-700 mb-1" />
@@ -286,7 +288,7 @@ const HotelList = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-center mt-auto">
                       {isAuthenticated ? (
                         <a
@@ -305,7 +307,7 @@ const HotelList = () => {
                           Contact Owner
                         </button>
                       )}
-                      <button 
+                      <button
                         className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition"
                         title="Share"
                         onClick={(e) => handleShare(hotel._id, e)}
@@ -377,9 +379,8 @@ const HotelList = () => {
                           {hotel.images.map((_, i) => (
                             <div
                               key={i}
-                              className={`w-1.5 h-1.5 rounded-full transition-all ${
-                                currentIndexes[hotel._id] === i ? "bg-white w-2.5 h-2.5" : "bg-white bg-opacity-60"
-                              }`}
+                              className={`w-1.5 h-1.5 rounded-full transition-all ${currentIndexes[hotel._id] === i ? "bg-white w-2.5 h-2.5" : "bg-white bg-opacity-60"
+                                }`}
                             ></div>
                           ))}
                         </div>
@@ -390,20 +391,19 @@ const HotelList = () => {
                       <p className="text-gray-500">No images available</p>
                     </div>
                   )}
-                  
+
                   <button
                     type="button"
                     onClick={(e) => toggleFavorite(hotel._id, e)}
-                    className={`absolute top-3 right-3 p-2 rounded-full ${
-                      favorites.includes(hotel._id) 
-                        ? "bg-red-500 text-white" 
+                    className={`absolute top-3 right-3 p-2 rounded-full ${favorites.includes(hotel._id)
+                        ? "bg-red-500 text-white"
                         : "bg-white text-gray-700 hover:text-red-500"
-                    } shadow-md transition-colors`}
+                      } shadow-md transition-colors`}
                   >
                     <IoIosHeart size={18} />
                   </button>
                 </div>
-                
+
                 {/* Hotel details */}
                 <div className="p-4">
                   <div className="flex justify-between items-start mb-3">
@@ -413,7 +413,7 @@ const HotelList = () => {
                       <span>{hotel.price.toLocaleString()}</span>
                     </div>
                   </div>
-                  
+
                   <a
                     className="inline-flex items-center text-xs bg-blue-50 text-blue-700 rounded-full px-2 py-1 mb-3"
                     href={`https://www.google.com/maps?q=${hotel.location.coordinates[1]},${hotel.location.coordinates[0]}`}
@@ -421,10 +421,10 @@ const HotelList = () => {
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <FaLocationDot className="mr-1" size={12} /> 
+                    <FaLocationDot className="mr-1" size={12} />
                     {hotel.address.address1}, {hotel.address.city}
                   </a>
-                  
+
                   <div className="grid grid-cols-4 gap-2 bg-gray-50 p-3 rounded-lg mb-4 text-center">
                     <div className="flex flex-col items-center">
                       <MdMeetingRoom className="text-lg text-gray-700" />
@@ -458,7 +458,7 @@ const HotelList = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     {isAuthenticated ? (
                       <a
@@ -477,7 +477,7 @@ const HotelList = () => {
                         Contact Owner
                       </button>
                     )}
-                    <button 
+                    <button
                       className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition"
                       title="Share"
                       onClick={(e) => handleShare(hotel._id, e)}
@@ -533,12 +533,12 @@ const HotelList = () => {
               </div>
               <h3 className="text-xl font-bold text-gray-800">Login Required</h3>
             </div>
-            
+
             <p className="text-gray-600 mb-6 text-center">
               You need to be logged in to view contact information of property owners.
               Please log in to continue.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row justify-center gap-3">
               <button
                 onClick={() => setShowLoginModal(false)}
