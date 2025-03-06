@@ -1,7 +1,7 @@
 import { Home, PlusCircle, Phone, MessageSquare, User, Hotel, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from "../assets/LicxoLogo.png"
+import logo from "../assets/LicxoLogo.png";
 
 const useAuth = () => {
   return !!localStorage.getItem("token");
@@ -27,6 +27,11 @@ function Navbar() {
     localStorage.removeItem("username");
     setSidebarOpen(false);
     window.location.href = "/"; // Redirect to home and refresh
+  };
+
+  const handleNavigation = (path) => {
+    setSidebarOpen(false);
+    navigate(path);
   };
 
   return (
@@ -91,7 +96,7 @@ function Navbar() {
               )}
               <li>
                 <button
-                  onClick={() => navigate("/")}
+                  onClick={() => handleNavigation("/")}
                   className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
                 >
                   <Home className="mr-2 h-5 w-5" /> Home Page
@@ -99,7 +104,7 @@ function Navbar() {
               </li>
               <li>
                 <button
-                  onClick={() => navigate("/addhotel")}
+                  onClick={() => handleNavigation("/addhotel")}
                   className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
                 >
                   <PlusCircle className="mr-2 h-5 w-5" /> Add Your Room
@@ -109,7 +114,7 @@ function Navbar() {
                 <>
                   <li>
                     <button
-                      onClick={() => navigate("/myrooms")}
+                      onClick={() => handleNavigation("/myrooms")}
                       className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
                     >
                       <Hotel className="mr-2 h-5 w-5" /> My Rooms
@@ -117,7 +122,7 @@ function Navbar() {
                   </li>
                   <li>
                     <button
-                      onClick={() => navigate("/profile")}
+                      onClick={() => handleNavigation("/profile")}
                       className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
                     >
                       <User className="mr-2 h-5 w-5" /> Profile
@@ -127,7 +132,7 @@ function Navbar() {
               )}
               <li>
                 <button
-                  onClick={() => navigate("/contact")}
+                  onClick={() => handleNavigation("/contact")}
                   className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
                 >
                   <Phone className="mr-2 h-5 w-5" /> Contact Us
@@ -135,7 +140,7 @@ function Navbar() {
               </li>
               <li>
                 <button
-                  onClick={() => navigate("/feedback")}
+                  onClick={() => handleNavigation("/feedback")}
                   className="flex items-center w-full px-4 py-2 text-left text-black rounded-md hover:bg-gray-200 transition"
                 >
                   <MessageSquare className="mr-2 h-5 w-5" /> Feedback
