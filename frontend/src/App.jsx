@@ -10,14 +10,13 @@ import Properties from './pages/Properties'
 import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
 import Myrooms from './pages/Myrooms'
+import Navbar from './components/Navbar'
 
 function App() {
-
-
   return (
-    <>
-
-      <BrowserRouter>
+    <BrowserRouter>
+      <Navbar />
+      <div className="pt-16"> {/* Push content below Navbar */}
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/myrooms' element={<Myrooms />} />
@@ -30,10 +29,9 @@ function App() {
           <Route path='/feedback' element={<FeedbackPage />} />
           <Route path="/hotel/:id" element={<HotelDetail />} />
         </Routes>
-      </BrowserRouter>
-
-    </>
-  )
+      </div>
+    </BrowserRouter>
+  );
 }
 
 export default App

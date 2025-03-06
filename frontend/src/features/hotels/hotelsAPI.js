@@ -93,7 +93,9 @@ export const filterHotels = createAsyncThunk(
 
 export const getOneHotel = createAsyncThunk('hotels/getOne', async (phone, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${API_URL}/hotels/${phone}`);
+   
+    const response = await axios.get(`${API_URL}/api/v1/hotels/myroom/${phone}`);
+    console.log("API Response:", response);  
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

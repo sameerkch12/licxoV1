@@ -18,7 +18,7 @@ hotelRoute.get('/hotels', getAllHotels);  // ${API_URL}/api/v1/hotels/hotels
 hotelRoute.get('/filter', filterHotels);  // ${API_URL}/api/v1/hotels/filter
 
 // Retrieve one hotel by phone
-//hotelRoute.get('/:phone', getOneHotel);  // ${API_URL}/api/v1/hotels/:phone
+hotelRoute.get('/myroom/:phone', getOneHotel);  // ${API_URL}/api/v1/hotels/myroom:phone
 
 
 hotelRoute.get('/:id', getOneHotelDetail);  // ${API_URL}/api/v1/hotels/:id

@@ -90,8 +90,11 @@ const hotelSlice = createSlice({
       })
       .addCase(getOneHotel.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.currentHotel = action.payload;
+        state.currentHotel = Array.isArray(action.payload.data) 
+          ? action.payload.data 
+          : [action.payload.data]; // Convert object to an array
       })
+      
       .addCase(getOneHotel.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
