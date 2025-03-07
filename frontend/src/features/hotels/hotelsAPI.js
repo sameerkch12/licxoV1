@@ -112,14 +112,17 @@ export const updateHotel = createAsyncThunk('hotels/update', async ({ phone, upd
 });
 
 
-export const deleteHotel = createAsyncThunk('hotels/delete', async (phone, { rejectWithValue }) => {
-  try {
-    const response = await axios.delete(`${API_URL}/hotels/${phone}`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+export const deleteHotel = createAsyncThunk(
+  'hotels/delete',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`${API_URL}/api/v1/hotels/delete/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
   }
-});
+);
 
 
 

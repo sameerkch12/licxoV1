@@ -113,6 +113,7 @@ const getOneHotelDetail = async( req , res) =>{
   }
 }
 
+
 const updateHotel = async (req, res) => {
   const { phone } = req.params;
   try {
@@ -126,14 +127,28 @@ const updateHotel = async (req, res) => {
 };
 
 const deleteHotel = async (req, res) => {
-  const { phone } = req.params;
-  try {
-    const deletedHotel = await hotelService.deleteHotelByPhone(phone);
-    if (!deletedHotel) return res.status(404).json({ success: false, message: "Hotel not found" });
+  const { id } = req.params; // URL se id nikal rahe hain
+ 
 
-    res.status(200).json({ success: true, message: "Hotel deleted successfully." });
+  try {
+    const deletedHotel = await hotelService.deleteHotelById(id);
+    if (!deletedHotel) {
+      return res.status(404).json({
+        success: false,
+        message: "Hotel not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Hotel deleted successfully."
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Unable to delete hotel.", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Unable to delete hotel.",
+      error: error.message
+    });
   }
 };
 

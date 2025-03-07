@@ -1,5 +1,5 @@
 const express = require("express");
-const { createHotel, getAllHotels, getOneHotel, findNearestHotels,  filterHotels , getOneHotelDetail} = require("../controllers/hotelController");
+const { createHotel, getAllHotels, getOneHotel, findNearestHotels,  filterHotels , getOneHotelDetail, deleteHotel} = require("../controllers/hotelController");
 const upload = require("../middlewares/multer");
 
 const hotelRoute = express.Router();
@@ -20,6 +20,7 @@ hotelRoute.get('/filter', filterHotels);  // ${API_URL}/api/v1/hotels/filter
 // Retrieve one hotel by phone
 hotelRoute.get('/myroom/:phone', getOneHotel);  // ${API_URL}/api/v1/hotels/myroom:phone
 
+hotelRoute.delete('/delete/:id', deleteHotel); //${API_URL}/api/v1/hotels/delete:id
 
 hotelRoute.get('/:id', getOneHotelDetail);  // ${API_URL}/api/v1/hotels/:id
 

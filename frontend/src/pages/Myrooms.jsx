@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Trash2, Edit, Phone, MapPin, Wifi, BedDouble } from "lucide-react";
+import { useDispatch } from "react-redux"; 
+import { deleteHotel } from "../features/hotels/hotelsAPI";
 import { jwtDecode } from "jwt-decode";
 
 export default function Myrooms() {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   // Local state for rooms, loading status, and errors
   const [rooms, setRooms] = useState([]);
@@ -63,20 +66,15 @@ export default function Myrooms() {
   };
 
   // Delete a specific room by phone number
-  const handleDelete = async (phone) => {
+  const handleDelete = async (roomId) => {
     if (window.confirm("Are you sure you want to delete this room?")) {
       setLoading(true);
       try {
-        // Replace "YOUR_BACKEND_URL" with your actual API URL
-        const response = await fetch(`YOUR_BACKEND_URL/hotels/${phone}`, {
-          method: "DELETE",
-        });
-        if (!response.ok) {
-          throw new Error("Failed to delete room.");
-        }
-        // Re-fetch rooms after successful deletion
+        // Yahan hum direct thunk ko dispatch kar rahe hain
+        await dispatch(deleteHotel(roomId)).unwrap();
+        // delete ke baad rooms ko dubara fetch kar lenge
         if (userPhone) {
-          fetchRooms(userPhone);
+          await fetchRooms(userPhone);
         }
       } catch (err) {
         setError(err.message || "Error deleting room.");
@@ -85,7 +83,6 @@ export default function Myrooms() {
       }
     }
   };
-
   // On component mount (and when userPhone changes), fetch the rooms
   useEffect(() => {
     if (userPhone) {
@@ -145,8 +142,10 @@ export default function Myrooms() {
               return (
                 <div
                   key={room._id}
+               
                   className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:transform hover:scale-105"
                 >
+                   
                   <div className="relative h-48">
                     <img
                       src={imageUrl}
@@ -154,14 +153,9 @@ export default function Myrooms() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-4 right-4 flex gap-2">
+                     
                       <button
-                        onClick={() => navigate(`/edit-room/${room._id}`)}
-                        className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
-                      >
-                        <Edit size={20} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(room.phone)}
+                         onClick={() => handleDelete(room._id)}
                         className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
                       >
                         <Trash2 size={20} />

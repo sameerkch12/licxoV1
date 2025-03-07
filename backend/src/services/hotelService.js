@@ -80,9 +80,11 @@ const updateHotelByPhone = async (phone, updateData) => {
   return await hotel.save();
 };
 
-const deleteHotelByPhone = async (phone) => {
-  return await Hotels.findOneAndDelete({ phone });
+const deleteHotelById = async (id) => {
+  // Mongoose ki findByIdAndDelete method use karein
+  return await Hotels.findByIdAndDelete(id);
 };
+
 
 module.exports = {
   createHotel,
@@ -91,5 +93,5 @@ module.exports = {
   findNearestHotels,
   filterHotels,
   updateHotelByPhone,
-  deleteHotelByPhone,
+  deleteHotelById,
 };
