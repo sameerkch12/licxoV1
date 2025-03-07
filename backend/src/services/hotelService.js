@@ -46,7 +46,7 @@ const getAllHotels = async () => {
 };
 
 const getOneHotelByPhone = async (phone) => {
-  return await Hotels.findOne({ phone });
+  return await Hotels.find({ phone });
 };
 
 const findNearestHotels = async (latitude, longitude, maxRadius) => {
