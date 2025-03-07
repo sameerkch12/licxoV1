@@ -15,11 +15,26 @@ import {
   CheckCircle,
 } from "lucide-react";
 import PlacesAutocomplete from "react-places-autocomplete";
+import { jwtDecode } from "jwt-decode";
+import Navbar from "../components/Navbar";
+
+
+const token = localStorage.getItem("token");
+let userPhone = null;
+
+if (token) {
+  try {
+    const decodedToken = jwtDecode(token);
+    userPhone = decodedToken.phoneNumber.replace(/^\+91/, "");
+  } catch (err) {
+    console.error("Invalid token:", err);
+  }
+}
 
 const AddHotels = () => {
   const [hotel, setHotel] = useState({
     name: "",
-    phone: "",
+    phone: userPhone || "",
     address1: "",
     district: "",
     state: "",
@@ -39,6 +54,8 @@ const AddHotels = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
 
   const validateForm = () => {
     const newErrors = {};
@@ -195,7 +212,9 @@ const AddHotels = () => {
   };
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+    
       {/* Success Notification */}
       {showSuccess && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">

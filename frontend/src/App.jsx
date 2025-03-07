@@ -15,8 +15,7 @@ import Navbar from './components/Navbar'
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <div className="pt-16"> {/* Push content below Navbar */}
+      
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/myrooms' element={<Myrooms />} />
@@ -29,7 +28,7 @@ function App() {
           <Route path='/feedback' element={<FeedbackPage />} />
           <Route path="/hotel/:id" element={<HotelDetail />} />
         </Routes>
-      </div>
+      
     </BrowserRouter>
   );
 }
