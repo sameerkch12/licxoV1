@@ -14,9 +14,10 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     console.error("Error Caught:", error, errorInfo);
 
-    // ⏳ 5 seconds baad homepage pe redirect
+    // ⏳ 5 seconds baad homepage pe redirectt
     setTimeout(() => {
       this.setState({ redirect: true });
+
     }, 5000);
   }
 
