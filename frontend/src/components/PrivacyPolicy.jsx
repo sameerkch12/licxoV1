@@ -7,9 +7,11 @@ import {
   Bell,
   Users,
   Database,
+  ArrowLeft,
   FileText,
   RefreshCw
 } from "lucide-react"
+import { Link } from "react-router-dom";
 
 const PolicySection = ({ icon: Icon, title, content }) => (
   <div className="mb-8">
@@ -21,7 +23,7 @@ const PolicySection = ({ icon: Icon, title, content }) => (
   </div>
 )
 
-export default function PrivacyPolicy() {
+export default function PrivacyPolicy({ onBack }) {
   const currentDate = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -75,13 +77,25 @@ export default function PrivacyPolicy() {
   ]
 
   return (
+
     <div className="min-h-screen bg-gray-50">
+     
       <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mb-8 flex items-center ">
+        <Link
+          to="/"
+          className="flex items-center text-blue-600 hover:text-blue-800"
+        >
+          <ArrowLeft className="h-5 w-5 mr-2" />
+          <span>Back </span>
+        </Link>
+      </div>
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-8 sm:px-10">
             <div className="flex items-center justify-between">
               <div>
+
                 <h1 className="text-3xl font-bold text-white">
                   Privacy Policy
                 </h1>
@@ -97,7 +111,7 @@ export default function PrivacyPolicy() {
           <div className="px-6 py-8 sm:px-10">
             <div className="prose max-w-none">
               <p className="text-gray-600 mb-8 leading-relaxed">
-                Licxo ("Company," "we," "us," or "our") is committed to
+                Licxo Company is committed to
                 protecting your privacy. This Privacy Policy outlines how we
                 collect, use, store, and share your information when you use our
                 services to find rental properties. By using our platform, you
@@ -129,9 +143,7 @@ export default function PrivacyPolicy() {
                 </div>
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-indigo-600" />
-                  <span className="text-gray-600">
-                    Bhilai, chhattisgarh 
-                  </span>
+                  <span className="text-gray-600">Bhilai, chhattisgarh</span>
                 </div>
               </div>
 
