@@ -250,7 +250,7 @@ const AddHotels = () => {
           <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-8">
             <div className="flex items-center">
               <Building2 className="h-10 w-10 text-white mr-3" />
-              <h2 className="text-3xl font-bold text-white">Add New Hotel</h2>
+              <h2 className="text-3xl font-bold text-white">Add Your Rental Room</h2>
             </div>
             <p className="mt-2 text-blue-100">
               Fill in the details to add a new hotel to your collection
