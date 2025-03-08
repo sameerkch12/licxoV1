@@ -14,14 +14,16 @@ import Navbar from './components/Navbar'
 import Profile from './pages/Profile'
 import NotFound from './components/Notfound'
 import ErrorBoundary from './components/ErrorBoundry'
+import PrivacyPolicy from './components/PrivacyPolicy'
 
 function App() {
   return (
-    
+
     <BrowserRouter>
        <ErrorBoundary>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/private_policy' element={<PrivacyPolicy/>} />
           <Route path='/myrooms' element={<Myrooms />} />
           <Route path='/profile' element={<Profile/>}/>
           <Route path="/about" element={<About />} />
