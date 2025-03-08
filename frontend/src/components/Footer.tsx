@@ -122,7 +122,7 @@ const Footer = () => {
 
         {/* Bottom section with copyright */}
         <div className="border-t border-gray-700 pt-6 text-center text-gray-400 text-sm">
-          <p>© {new Date().getFullYear()} RoomRental. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Licxo. All rights reserved.</p>
           <div className="flex justify-center space-x-4 mt-2">
             <Link to="/" className="hover:text-red-500 transition-colors">Privacy Policy</Link>
             <Link to="/" className="hover:text-red-500 transition-colors">Terms of Service</Link>
