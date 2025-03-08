@@ -17,6 +17,7 @@ import ErrorBoundary from './components/ErrorBoundry'
 
 function App() {
   return (
+    
     <BrowserRouter>
        <ErrorBoundary>
         <Routes>
