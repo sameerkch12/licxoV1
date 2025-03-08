@@ -30,7 +30,7 @@ export const FilterContent = ({
         <div className="mb-6">
           <h3 className="text-base font-semibold mb-3 text-gray-900">Room Type</h3>
           <div className="grid grid-cols-2 gap-2">
-            {["1 BHK", "2 BHK", "3 BHK", "Single Room"].map((type) => (
+            {["1BHK", "2BHK", "3BHK", "Single Room"].map((type) => (
               <button
                 key={type}
                 onClick={() => {
