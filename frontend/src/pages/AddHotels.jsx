@@ -222,7 +222,7 @@ const AddHotels = () => {
             <div className="text-center">
               <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                Hotel Added Successfully!
+                Room Added Successfully!
               </h3>
               <p className="text-gray-600 mb-6">
                 Your hotel "{hotel.name}" has been added to the system.
@@ -242,7 +242,7 @@ const AddHotels = () => {
             className="flex items-center text-blue-600 hover:text-blue-800"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
-            <span>Back to Hotels</span>
+            <span>Back </span>
           </Link>
         </div>
 
@@ -253,7 +253,7 @@ const AddHotels = () => {
               <h2 className="text-3xl font-bold text-white">Add Your Rental Room</h2>
             </div>
             <p className="mt-2 text-blue-100">
-              Fill in the details to add a new hotel to your collection
+              Fill in the details to add a new Room to your collection
             </p>
           </div>
 
@@ -295,7 +295,7 @@ const AddHotels = () => {
               {/* Hotel Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Hotel Name <span className="text-red-500">*</span>
+                  Owner Name <span className="text-red-500">*</span>
                 </label>
                 <div className="relative rounded-md shadow-sm">
                   <div className="absolute left-0 pl-3 flex items-center pointer-events-none top-1/2 transform -translate-y-1/2">
@@ -304,7 +304,7 @@ const AddHotels = () => {
                   <input
                     type="text"
                     name="name"
-                    placeholder="Enter Hotel Name"
+                    placeholder="Enter Owner Name"
                     value={hotel.name}
                     onChange={handleChange}
                     className={`block w-full pl-10 pr-3 py-3 border ${
@@ -349,7 +349,7 @@ const AddHotels = () => {
               {/* Price per Night */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Price per Night (₹){" "}
+                  Price per Month (₹){" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <div className="relative rounded-md shadow-sm">
@@ -697,7 +697,7 @@ const AddHotels = () => {
                 className="flex-1 flex justify-center items-center px-4 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
               >
                 <Building2 className="h-5 w-5 mr-2" />
-                {loading ? "Creating..." : "Create Hotel"}
+                {loading ? "Creating..." : "Create Room"}
               </button>
             </div>
 
