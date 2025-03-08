@@ -12,11 +12,13 @@ import FAQ from './pages/FAQ'
 import Myrooms from './pages/Myrooms'
 import Navbar from './components/Navbar'
 import Profile from './pages/Profile'
+import NotFound from './components/Notfound'
+import ErrorBoundary from './components/ErrorBoundry'
 
 function App() {
   return (
     <BrowserRouter>
-      
+       <ErrorBoundary>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/myrooms' element={<Myrooms />} />
@@ -29,7 +31,9 @@ function App() {
           <Route path='/addhotel' element={<AddHotels />} />
           <Route path='/feedback' element={<FeedbackPage />} />
           <Route path="/hotel/:id" element={<HotelDetail />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
+        </ErrorBoundary>
       
     </BrowserRouter>
   );
