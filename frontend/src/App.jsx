@@ -11,6 +11,7 @@ import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
 import Myrooms from './pages/Myrooms'
 import Navbar from './components/Navbar'
+import Profile from './pages/Profile'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/myrooms' element={<Myrooms />} />
+          <Route path='/profile' element={<Profile/>}/>
           <Route path="/about" element={<About />} />
           <Route path='/login' element={<Login />} />
           <Route path="/properties" element={<Properties />} />
