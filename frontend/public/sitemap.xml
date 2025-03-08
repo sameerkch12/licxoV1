@@ -1,16 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
-
-<url>
-  <loc>https://licxo.in/</loc>
-  <lastmod>2025-03-08T16:22:18+00:00</lastmod>
-</url>
-
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://licxo.in/</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/private_policy</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/myrooms</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/profile</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/about</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/login</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/properties</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/contact</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/faqs</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/addhotel</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
+    <url>
+        <loc>https://licxo.in/feedback</loc>
+        <lastmod>2025-03-08T16:22:18+00:00</lastmod>
+    </url>
 </urlset>
