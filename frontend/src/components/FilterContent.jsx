@@ -2,22 +2,37 @@ import React from "react";
 import { X, Check, Wifi, Home, BedDouble } from "lucide-react";
 
 export const FilterContent = ({
-  filters,
-  onFilterChange,
-  onClear,
-  onApply,
-  onClose,
+  filters,         // e.g. { roomType: "", bed: "", wifi: false, furnished: false }
+  onFilterChange,  // function to update parent state
+  onClear,         // function to reset all filters
+  onApply,         // function to apply filters
+  onClose,         // function to close the filter modal
 }) => {
+  // Toggle single-select for Room Type
+  const handleRoomTypeSelection = (type) => {
+    onFilterChange({
+      roomType: filters.roomType === type ? "" : type,
+    });
+  };
+
+  // Toggle single-select for Beds
+  const handleBedSelection = (bedOption) => {
+    onFilterChange({
+      bed: filters.bed === bedOption ? "" : bedOption,
+    });
+  };
+
   return (
     <>
       {/* Overlay backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
         onClick={onClose}
       />
       
       {/* Filter modal */}
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm max-h-[80vh] overflow-y-auto bg-white p-6 rounded-2xl shadow-2xl border border-gray-200 z-50">
+        
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -26,36 +41,59 @@ export const FilterContent = ({
           <X size={20} />
         </button>
 
-        {/* Room Type */}
+        {/* Room Type (Single-Select) */}
         <div className="mb-6">
           <h3 className="text-base font-semibold mb-3 text-gray-900">Room Type</h3>
           <div className="grid grid-cols-2 gap-2">
-            {["1BHK", "2BHK", "3BHK", "Single Room"].map((type) => (
-              <button
-                key={type}
-                onClick={() => {
-                  const newRoomTypes = filters.roomType.includes(type)
-                    ? filters.roomType.filter((t) => t !== type)
-                    : [...filters.roomType, type];
-                  onFilterChange({ roomType: newRoomTypes });
-                }}
-                className={`flex items-center justify-center gap-1.5 p-2 rounded-lg border text-sm transition-all ${
-                  filters.roomType.includes(type)
-                    ? "border-black bg-black text-white"
-                    : "border-gray-200 hover:border-gray-900 text-gray-900 hover:bg-gray-50"
-                }`}
-              >
-                <BedDouble size={16} />
-                <span className="font-medium">{type}</span>
-              </button>
-            ))}
+            {["1BHK", "2BHK", "3BHK", "Single Room"].map((type) => {
+              const isSelected = filters.roomType === type;
+              return (
+                <button
+                  key={type}
+                  onClick={() => handleRoomTypeSelection(type)}
+                  className={`flex items-center justify-center gap-1.5 p-2 rounded-lg border text-sm transition-all ${
+                    isSelected
+                      ? "border-black bg-black text-white"
+                      : "border-gray-200 hover:border-gray-900 text-gray-900 hover:bg-gray-50"
+                  }`}
+                >
+                  <BedDouble size={16} />
+                  <span className="font-medium">{type}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Amenities */}
+        {/* Beds (Single-Select) */}
+        <div className="mb-6">
+          <h3 className="text-base font-semibold mb-3 text-gray-900">Beds</h3>
+          <div className="grid grid-cols-3 gap-2">
+            {["1Bed", "2Bed", "3Bed"].map((bedOption) => {
+              const isSelected = filters.bed === bedOption;
+              return (
+                <button
+                  key={bedOption}
+                  onClick={() => handleBedSelection(bedOption)}
+                  className={`flex items-center justify-center gap-1.5 p-2 rounded-lg border text-sm transition-all ${
+                    isSelected
+                      ? "border-black bg-black text-white"
+                      : "border-gray-200 hover:border-gray-900 text-gray-900 hover:bg-gray-50"
+                  }`}
+                >
+                  <BedDouble size={16} />
+                  <span className="font-medium">{bedOption}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Amenities (Furnished, WiFi) */}
         <div className="mb-6">
           <h3 className="text-base font-semibold mb-3 text-gray-900">Amenities</h3>
           <div className="grid grid-cols-1 gap-2">
+            {/* Furnished */}
             <button
               onClick={() => onFilterChange({ furnished: !filters.furnished })}
               className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
@@ -69,6 +107,7 @@ export const FilterContent = ({
               {filters.furnished && <Check size={16} className="ml-auto" />}
             </button>
 
+            {/* WiFi */}
             <button
               onClick={() => onFilterChange({ wifi: !filters.wifi })}
               className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
@@ -84,7 +123,7 @@ export const FilterContent = ({
           </div>
         </div>
 
-        {/* Actions */}
+        {/* Actions (Clear / Apply) */}
         <div className="flex justify-end gap-2">
           <button
             onClick={onClear}
