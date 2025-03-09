@@ -125,7 +125,7 @@ const Footer = () => {
           <p>© {new Date().getFullYear()} Licxo. All rights reserved.</p>
           <div className="flex justify-center space-x-4 mt-2">
             <Link to="/private_policy" className="hover:text-red-500 transition-colors">Privacy Policy</Link>
-            <Link to="/" className="hover:text-red-500 transition-colors">Terms of Service</Link>
+            <Link to="/terms_of_service" className="hover:text-red-500 transition-colors">Terms of Service</Link>
             <Link to="/" className="hover:text-red-500 transition-colors">Sitemap</Link>
           </div>
         </div>

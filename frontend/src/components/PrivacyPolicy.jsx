@@ -12,6 +12,7 @@ import {
   RefreshCw
 } from "lucide-react"
 import { Link } from "react-router-dom";
+import Backbuttom from "./backbuttom";
 
 const PolicySection = ({ icon: Icon, title, content }) => (
   <div className="mb-8">
@@ -81,15 +82,7 @@ export default function PrivacyPolicy({ onBack }) {
     <div className="min-h-screen bg-gray-50">
      
       <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mb-8 flex items-center ">
-        <Link
-          to="/"
-          className="flex items-center text-blue-600 hover:text-blue-800"
-        >
-          <ArrowLeft className="h-5 w-5 mr-2" />
-          <span>Back </span>
-        </Link>
-      </div>
+     <Backbuttom/>
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-8 sm:px-10">

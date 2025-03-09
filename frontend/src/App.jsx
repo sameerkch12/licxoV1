@@ -15,6 +15,7 @@ import Profile from './pages/Profile'
 import NotFound from './components/Notfound'
 import ErrorBoundary from './components/ErrorBoundry'
 import PrivacyPolicy from './components/PrivacyPolicy'
+import TermsOfService from './components/TermsOfService'
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/private_policy' element={<PrivacyPolicy/>} />
+          
+          <Route path='/terms_of_service' element={<TermsOfService/>} />
           <Route path='/myrooms' element={<Myrooms />} />
           <Route path='/profile' element={<Profile/>}/>
           <Route path="/about" element={<About />} />
