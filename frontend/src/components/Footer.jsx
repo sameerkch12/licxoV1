@@ -67,20 +67,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Property Types */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Property Types</h3>
-            <ul className="space-y-2">
-              {['Single Rooms', 'Shared Apartments', 'PG Accommodations', 'Studio Apartments', 'Flats'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-gray-400 hover:text-red-500 transition-colors flex items-center">
-                    <ChevronRight className="h-4 w-4 mr-1" />
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+       
 
           {/* Newsletter */}
           <div>
