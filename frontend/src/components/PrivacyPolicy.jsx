@@ -12,7 +12,7 @@ import {
   RefreshCw
 } from "lucide-react"
 import { Link } from "react-router-dom";
-import Backbuttom from "./backbuttom";
+import Backbuttom from "./Backbuttom";
 
 const PolicySection = ({ icon: Icon, title, content }) => (
   <div className="mb-8">

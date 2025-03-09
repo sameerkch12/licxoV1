@@ -9,7 +9,7 @@ import {
   FileText,
   Mail
 } from "lucide-react"
-import Backbuttom from "./backbuttom"
+import Backbuttom from "./Backbuttom"
 
 const TermsOfService = () => {
   return (
