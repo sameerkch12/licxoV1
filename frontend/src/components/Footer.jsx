@@ -4,7 +4,7 @@ import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, ChevronRig
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className=" bg-[#000000] text-white">
       <div className="container mx-auto px-4 py-10">
         {/* Top section with logo and social links */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-700 pb-6">
