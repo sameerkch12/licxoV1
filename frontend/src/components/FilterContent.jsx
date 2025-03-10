@@ -1,5 +1,6 @@
 import React from "react";
 import { X, Check, Wifi, Home, BedDouble } from "lucide-react";
+import { Range } from "react-range";
 
 export const FilterContent = ({
   filters,         // e.g. { roomType: "", bed: "", wifi: false, furnished: false }
@@ -8,14 +9,18 @@ export const FilterContent = ({
   onApply,         // function to apply filters
   onClose,         // function to close the filter modal
 }) => {
-  // Toggle single-select for Room Type
+  const maxPrice = filters.maxPrice || 5000; // Default max price
+
+  const handlePriceChange = (values) => {
+    onFilterChange({ maxPrice: values[0] });
+  };
+
   const handleRoomTypeSelection = (type) => {
     onFilterChange({
       roomType: filters.roomType === type ? "" : type,
     });
   };
 
-  // Toggle single-select for Beds
   const handleBedSelection = (bedOption) => {
     onFilterChange({
       bed: filters.bed === bedOption ? "" : bedOption,
@@ -29,10 +34,9 @@ export const FilterContent = ({
         className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
         onClick={onClose}
       />
-      
+
       {/* Filter modal */}
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm max-h-[80vh] overflow-y-auto bg-white p-6 rounded-2xl shadow-2xl border border-gray-200 z-50">
-        
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -43,7 +47,9 @@ export const FilterContent = ({
 
         {/* Room Type (Single-Select) */}
         <div className="mb-6">
-          <h3 className="text-base font-semibold mb-3 text-gray-900">Room Type</h3>
+          <h3 className="text-base font-semibold mb-3 text-gray-900">
+            Room Type
+          </h3>
           <div className="grid grid-cols-2 gap-2">
             {["1BHK", "2BHK", "3BHK", "Single Room"].map((type) => {
               const isSelected = filters.roomType === type;
@@ -89,13 +95,46 @@ export const FilterContent = ({
           </div>
         </div>
 
+        {/* Price Range Slider (Only Max Price) */}
+        <div className="mb-6">
+          <h3 className="text-base font-semibold mb-3 text-gray-900">
+            Max Price
+          </h3>
+          <div className="flex justify-between text-sm mb-2">
+            <span>₹0</span>
+            <span>₹{maxPrice}</span>
+          </div>
+          <Range
+            step={100}
+            min={0}
+            max={5000}
+            values={[maxPrice]}
+            onChange={handlePriceChange}
+            renderTrack={({ props, children }) => (
+              <div {...props} className="h-2 bg-gray-300 rounded-lg relative">
+                {children}
+              </div>
+            )}
+            renderThumb={({ props }) => (
+              <div
+                {...props}
+                className="w-4 h-4 bg-black rounded-full cursor-pointer"
+              />
+            )}
+          />
+        </div>
+
         {/* Amenities (Furnished, WiFi) */}
         <div className="mb-6">
-          <h3 className="text-base font-semibold mb-3 text-gray-900">Amenities</h3>
+          <h3 className="text-base font-semibold mb-3 text-gray-900">
+            Amenities
+          </h3>
           <div className="grid grid-cols-1 gap-2">
             {/* Furnished */}
             <button
-              onClick={() => onFilterChange({ furnished: !filters.furnished })}
+              onClick={() =>
+                onFilterChange({ furnished: !filters.furnished })
+              }
               className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
                 filters.furnished
                   ? "border-black bg-black text-white"

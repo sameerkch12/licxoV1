@@ -8,17 +8,22 @@ export const HotelFilter = () => {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Single-select for roomType & bed, plus wifi/furnished as booleans (or null)
+  // Initialize wifi and furnished as booleans (false) for consistency
   const [filters, setFilters] = useState({
     roomType: "",   // e.g. "1BHK", "2BHK", "3BHK", or "Single Room"
-    bed: "",        // e.g. "1 Bed", "2 Beds", "3 Beds"
-    wifi: null,     // true/false/null
-    furnished: null // true/false/null
+    bed: "",        // e.g. "1Bed", "2Bed", "3Bed"
+    wifi: false,    // Changed from null to false
+    furnished: false, // Changed from null to false
+    maxPrice: 5000, // Default max price
   });
 
   // Check if any filters are active
   const hasActiveFilters =
-    !!filters.roomType || !!filters.bed || filters.wifi || filters.furnished;
+    !!filters.roomType ||
+    !!filters.bed ||
+    filters.wifi ||
+    filters.furnished ||
+    filters.maxPrice !== 5000;
 
   // Update local state with partial changes
   const handleFilterChange = (newFilters) => {
@@ -30,8 +35,9 @@ export const HotelFilter = () => {
     const defaultFilters = {
       roomType: "",
       bed: "",
-      wifi: null,
-      furnished: null
+      wifi: false,
+      furnished: false,
+      maxPrice: 5000,
     };
     setFilters(defaultFilters);
 
@@ -41,13 +47,13 @@ export const HotelFilter = () => {
 
   // Apply filters to the back-end
   const applyFilters = () => {
-    // Convert our booleans/null to whatever the API expects
-    // For example, "Yes" for wifi/furnished if true, else skip the key
+    // Convert our booleans to what the API expects
     const apiFilters = {
       room: filters.roomType || undefined,
       bed: filters.bed || undefined,
       wifi: filters.wifi ? "Yes" : undefined,
-      furnished: filters.furnished ? "Yes" : undefined
+      furnished: filters.furnished ? "Yes" : undefined,
+      maxPrice: filters.maxPrice || undefined,
     };
 
     // Remove any falsy/undefined keys
