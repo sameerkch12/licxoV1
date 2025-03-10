@@ -51,11 +51,14 @@ function Navbar() {
           <div className="flex justify-between h-16 items-center">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
-              <img
-                src={logo}
-                alt="logo"
-                className="h-12 w-auto"
-              />
+              <a href="/">
+                <img
+                  src={logo}
+                  alt="logo"
+                  className="h-12 w-auto"
+                />
+              </a>
+
             </div>
 
             {/* Navigation Links */}
@@ -142,8 +145,8 @@ function Navbar() {
             <Menu className="h-8 w-8" />
           </button>
           <a href="/" className="flex items-center">
-      <img src={logo} alt="logo" className="h-8 w-auto" />
-    </a>
+            <img src={logo} alt="logo" className="h-8 w-auto" />
+          </a>
         </div>
 
         {/* Mobile Sidebar */}
