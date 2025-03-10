@@ -9,7 +9,7 @@ export const FilterContent = ({
   onApply,         // function to apply filters
   onClose,         // function to close the filter modal
 }) => {
-  const maxPrice = filters.maxPrice || 5000; // Default max price
+  const maxPrice = filters.maxPrice || 10000; // Default max price
 
   const handlePriceChange = (values) => {
     onFilterChange({ maxPrice: values[0] });
@@ -101,13 +101,13 @@ export const FilterContent = ({
             Max Price
           </h3>
           <div className="flex justify-between text-sm mb-2">
-            <span>₹0</span>
+            <span>₹500</span>
             <span>₹{maxPrice}</span>
           </div>
           <Range
             step={100}
-            min={0}
-            max={5000}
+            min={500}
+            max={10000}
             values={[maxPrice]}
             onChange={handlePriceChange}
             renderTrack={({ props, children }) => (

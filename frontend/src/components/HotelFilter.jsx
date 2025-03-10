@@ -14,7 +14,7 @@ export const HotelFilter = () => {
     bed: "",        // e.g. "1Bed", "2Bed", "3Bed"
     wifi: false,    // Changed from null to false
     furnished: false, // Changed from null to false
-    maxPrice: 5000, // Default max price
+    maxPrice: 10000, // Default max price
   });
 
   // Check if any filters are active
@@ -23,7 +23,7 @@ export const HotelFilter = () => {
     !!filters.bed ||
     filters.wifi ||
     filters.furnished ||
-    filters.maxPrice !== 5000;
+    filters.maxPrice !== 10000;
 
   // Update local state with partial changes
   const handleFilterChange = (newFilters) => {
@@ -37,7 +37,7 @@ export const HotelFilter = () => {
       bed: "",
       wifi: false,
       furnished: false,
-      maxPrice: 5000,
+      maxPrice: 10000,
     };
     setFilters(defaultFilters);
 
