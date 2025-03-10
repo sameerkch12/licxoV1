@@ -10,6 +10,7 @@ import {
 } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import logo from "../assets/LicxoLogo.png";
 
 const useAuth = () => {
   return !!localStorage.getItem("token")
@@ -51,7 +52,7 @@ function Navbar() {
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
               <img
-                src="/src/assets/LicxoLogo.png"
+                src={logo}
                 alt="logo"
                 className="h-12 w-auto"
               />
@@ -140,7 +141,7 @@ function Navbar() {
           >
             <Menu className="h-8 w-8" />
           </button>
-          <img src="/src/assets/LicxoLogo.png" alt="logo" className="h-12" />
+          <img src={logo} alt="logo" className="h-12" />
         </div>
 
         {/* Mobile Sidebar */}
