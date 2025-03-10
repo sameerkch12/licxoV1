@@ -85,7 +85,7 @@ const SearchFilterDistrict = () => {
   return (
     <div>
       {/* Desktop View */}
-      <div className="bg-gradient-to-r from-blue-900 to-indigo-800 px-4 py-8 shadow-lg hidden md:block">
+      <div className="bg-gradient-to-r bg-[#172455]  px-4 py-8 shadow-lg hidden md:block">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-6 text-white">
             Find Your Perfect Room
@@ -140,10 +140,10 @@ const SearchFilterDistrict = () => {
               </div>
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center ">
               <button
                 onClick={handleSearch}
-                className="px-8 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="px-8 py-3 bg-gradient-to-r bg-[#172455]  text-white font-bold rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
                 <Search className="inline mr-2" size={18} />
                 Search Rooms
@@ -154,7 +154,7 @@ const SearchFilterDistrict = () => {
       </div>
 
       {/* Mobile View */}
-      <div className="md:hidden bg-gradient-to-r from-blue-900 to-indigo-800 p-4">
+      <div className="md:hidden bg-gradient-to-r bg-[#172455]  p-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-center mt-12 mb-4 text-white">
             Find Your Perfect Room
@@ -211,7 +211,7 @@ const SearchFilterDistrict = () => {
 
             <button
               onClick={handleSearch}
-              className="w-full py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md flex items-center justify-center"
+              className="w-full py-3 bg-gradient-to-r  bg-[#172455] text-white font-bold rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md flex items-center justify-center"
             >
               <Search className="mr-2" size={18} />
               Search Rooms
