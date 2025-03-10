@@ -1,4 +1,4 @@
-import { useState ,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,14 @@ const Login = () => {
       navigate("/");
     }
   }, [isLoggedIn]);
-
+  
+  useEffect(() => {
+    // Automatically verify OTP if 6 digits have been entered
+    if (otp.length === 6) {
+      handleVerifyOtp();
+    }
+  }, [otp]);
+  
   // Handle sending OTP
   const handleSendOtp = async () => {
     if (!phoneNumber) return alert("Please enter a phone number.");
@@ -106,7 +113,7 @@ const Login = () => {
   };
 
   // If user is logged in, show header + logout only (no welcome box)
- 
+
 
   // Otherwise show login flow
   return (
@@ -120,26 +127,26 @@ const Login = () => {
           </div>
           <p className="text-blue-100 text-lg">Find your perfect room in minutes</p>
         </div>
-        
+
         <div className="relative h-64">
-          <img 
-            src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" 
-            alt="Modern room interior" 
+          <img
+            src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+            alt="Modern room interior"
             className="absolute bottom-0 left-0 w-full h-full object-cover rounded-lg opacity-80"
           />
           <div className="absolute bottom-4 left-4 bg-black bg-opacity-50 p-3 rounded-lg">
             <p className="text-white text-sm">Hundreds of rooms available in your area</p>
           </div>
         </div>
-        
+
         <div>
           <p className="text-sm text-blue-200">© 2025 RoomFinder. All rights reserved.</p>
         </div>
       </div>
-      
+
       {/* Right side - Login form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6 bg-gray-50">
-        <motion.div 
+        <motion.div
           initial="hidden"
           animate="visible"
           variants={fadeIn}
@@ -154,18 +161,18 @@ const Login = () => {
                 </div>
                 <span className="text-xs mt-1">Phone</span>
               </div>
-              
+
               <div className={`flex-1 h-1 mx-2 ${step >= 2 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
-              
+
               <div className="flex flex-col items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center ${step >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
                   <Lock size={20} />
                 </div>
                 <span className="text-xs mt-1">Verify</span>
               </div>
-              
+
               <div className={`flex-1 h-1 mx-2 ${step >= 3 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
-              
+
               <div className="flex flex-col items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center ${step >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
                   <User size={20} />
@@ -174,14 +181,14 @@ const Login = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-8 rounded-xl shadow-lg">
             <h2 className="text-3xl font-bold mb-2 text-gray-800">
               {step === 1 && "Find Your Room"}
               {step === 2 && "Verification"}
               {step === 3 && "Create Profile"}
             </h2>
-            
+
             <p className="text-gray-600 mb-6">
               {step === 1 && "Enter your phone number to get started"}
               {step === 2 && "Enter the OTP sent to your phone"}
@@ -234,6 +241,7 @@ const Login = () => {
                     {[...Array(6)].map((_, i) => (
                       <input
                         key={i}
+                        id={`otp-${i}`}
                         type="text"
                         maxLength={1}
                         className="w-12 h-12 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl font-bold"
@@ -242,18 +250,28 @@ const Login = () => {
                           const newOtp = otp.split('');
                           newOtp[i] = e.target.value;
                           setOtp(newOtp.join(''));
-                          
-                          // Auto-focus next input
+
+                          // Auto-focus next input if available
                           if (e.target.value && i < 5) {
-                            const nextInput = e.target.parentElement?.nextElementSibling?.querySelector('input');
-                            if (nextInput) nextInput.focus();
+                            const inputs = e.target.parentElement.querySelectorAll('input');
+                            if (inputs[i + 1]) {
+                              inputs[i + 1].focus();
+                            }
+                          }
+                        }}
+                        onPaste={(e) => {
+                          e.preventDefault();
+                          const pasteData = e.clipboardData.getData('text').trim();
+                          if (pasteData.length === 6) {
+                            setOtp(pasteData);
                           }
                         }}
                       />
                     ))}
                   </div>
                   <p className="text-center text-sm text-gray-500 mt-4">
-                    Didn't receive code? <button className="text-blue-600 font-medium">Resend</button>
+                    Didn't receive code?{" "}
+                    <button className="text-blue-600 font-medium">Resend</button>
                   </p>
                 </div>
                 <button
@@ -274,6 +292,7 @@ const Login = () => {
                 </button>
               </motion.div>
             )}
+
 
             {step === 3 && (
               <motion.div
@@ -309,7 +328,7 @@ const Login = () => {
                 </button>
               </motion.div>
             )}
-            
+
             <div className="mt-6 text-center text-sm text-gray-600">
               {step === 1 && (
                 <p>
