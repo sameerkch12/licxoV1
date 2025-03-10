@@ -141,7 +141,9 @@ function Navbar() {
           >
             <Menu className="h-8 w-8" />
           </button>
-          <img src={logo} alt="logo" className="h-12" />
+          <a href="/" className="flex items-center">
+      <img src={logo} alt="logo" className="h-8 w-auto" />
+    </a>
         </div>
 
         {/* Mobile Sidebar */}
