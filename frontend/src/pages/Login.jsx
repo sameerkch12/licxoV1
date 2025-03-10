@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useRef } from "react";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -113,6 +114,8 @@ const Login = () => {
   };
 
   // If user is logged in, show header + logout only (no welcome box)
+
+  const otpRefs = useRef([]);
 
 
   // Otherwise show login flow
@@ -230,69 +233,71 @@ const Login = () => {
               </motion.div>
             )}
 
-            {step === 2 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="mb-6">
-                  <div className="flex justify-center gap-2">
-                    {[...Array(6)].map((_, i) => (
-                      <input
-                        key={i}
-                        id={`otp-${i}`}
-                        type="text"
-                        maxLength={1}
-                        className="w-12 h-12 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl font-bold"
-                        value={otp[i] || ""}
-                        onChange={(e) => {
-                          const newOtp = otp.split('');
-                          newOtp[i] = e.target.value;
-                          setOtp(newOtp.join(''));
-
-                          // Auto-focus next input if available
-                          if (e.target.value && i < 5) {
-                            const inputs = e.target.parentElement.querySelectorAll('input');
-                            if (inputs[i + 1]) {
-                              inputs[i + 1].focus();
-                            }
-                          }
-                        }}
-                        onPaste={(e) => {
-                          e.preventDefault();
-                          const pasteData = e.clipboardData.getData('text').trim();
-                          if (pasteData.length === 6) {
-                            setOtp(pasteData);
-                          }
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-center text-sm text-gray-500 mt-4">
-                    Didn't receive code?{" "}
-                    <button className="text-blue-600 font-medium">Resend</button>
-                  </p>
-                </div>
-                <button
-                  onClick={handleVerifyOtp}
-                  disabled={loading}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
-                >
-                  {loading ? (
-                    <div className="flex items-center">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      Verifying...
-                    </div>
-                  ) : (
-                    <>
-                      Verify OTP <CheckCircle size={18} />
-                    </>
-                  )}
-                </button>
-              </motion.div>
-            )}
-
+{step === 2 && (
+  <motion.div
+    initial={{ opacity: 0, x: 20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.3 }}
+  >
+    <div className="mb-6">
+      <div className="flex justify-center gap-2">
+        {[...Array(6)].map((_, i) => (
+          <input
+            key={i}
+            ref={(el) => (otpRefs.current[i] = el)}
+            id={`otp-${i}`}
+            type="text"
+            maxLength={1}
+            inputMode="numeric"
+            pattern="[0-9]*"
+            className="w-12 h-12 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl font-bold"
+            value={otp[i] || ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              // Accept only numeric values
+              if (!/^\d?$/.test(value)) return;
+              const newOtp = otp.split("");
+              newOtp[i] = value;
+              setOtp(newOtp.join(""));
+              
+              // Auto-focus next input if available
+              if (value && i < 5 && otpRefs.current[i + 1]) {
+                otpRefs.current[i + 1].focus();
+              }
+            }}
+            onPaste={(e) => {
+              e.preventDefault();
+              const pasteData = e.clipboardData.getData("text").trim();
+              if (/^\d{6}$/.test(pasteData)) {
+                setOtp(pasteData);
+              }
+            }}
+          />
+        ))}
+      </div>
+      <p className="text-center text-sm text-gray-500 mt-4">
+        Didn't receive code?{" "}
+        <button className="text-blue-600 font-medium">Resend</button>
+      </p>
+    </div>
+    <button
+      onClick={handleVerifyOtp}
+      disabled={loading}
+      className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
+    >
+      {loading ? (
+        <div className="flex items-center">
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+          Verifying...
+        </div>
+      ) : (
+        <>
+          Verify OTP <CheckCircle size={18} />
+        </>
+      )}
+    </button>
+  </motion.div>
+)}
 
             {step === 3 && (
               <motion.div
