@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
+
+  const handleRedirect = () => {
+    navigate('/login'); // Local route pe navigate karega
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,10 +40,16 @@ const Profile = () => {
   if (!profile) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <p className="text-gray-500 text-lg">Please login to view your profile</p>
-        </div>
+      <div className="bg-white p-6 rounded-lg shadow-md text-center">
+        <p className="text-gray-500 text-lg mb-4">Please login to view your profile</p>
+        <button
+          onClick={handleRedirect}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+        >
+          Login
+        </button>
       </div>
+    </div>
     );
   }
 

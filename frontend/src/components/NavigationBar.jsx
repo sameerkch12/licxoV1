@@ -1,6 +1,6 @@
 import { IoMdHome } from "react-icons/io";
 import { FiPlusCircle } from "react-icons/fi";
-import { IoIosHeartEmpty } from "react-icons/io";
+import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 
 const useAuth = () => {
@@ -36,9 +36,9 @@ const NavigationBar = () => {
             </button>
           </li>
           <li>
-            <a href="/" className="flex flex-col items-center text-white">
-              <IoIosHeartEmpty className="text-2xl" />
-              Shortlist
+            <a href="/profile" className="flex flex-col items-center text-white">
+              <CgProfile className="text-2xl" />
+              Profile
             </a>
           </li>
         </ul>
