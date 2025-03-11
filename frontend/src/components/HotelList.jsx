@@ -231,7 +231,7 @@ const HotelList = () => {
                     <div>
                       <div className="flex justify-between items-start mb-4">
                         <h3 className="text-2xl font-bold text-gray-800">{hotel.name}</h3>
-                        <div className="flex items-center text-2xl font-bold text-blue-600">
+                        <div className="flex items-center text-2xl font-bold text-black">
                           <FaRupeeSign className="mr-1" />
                           <span>{hotel.price.toLocaleString()}</span>
                           <span className="text-sm text-gray-500 font-normal ml-1">/month</span>
@@ -301,7 +301,7 @@ const HotelList = () => {
                       ) : (
                         <button
                           onClick={(e) => handleContactOwner(e)}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                          className="flex items-center gap-2 px-4 py-2 bg-[#122455] text-white rounded-lg hover:bg-blue-700 transition"
                         >
                           <IoCallOutline />
                           Contact Owner
