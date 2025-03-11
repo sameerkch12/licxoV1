@@ -126,7 +126,7 @@ const Login = () => {
         <div>
           <div className="flex items-center gap-2 mb-4">
             <Home size={32} />
-            <h1 className="text-4xl font-bold">RoomFinder</h1>
+            <h1 className="text-4xl font-bold">Licxo</h1>
           </div>
           <p className="text-blue-100 text-lg">Find your perfect room in minutes</p>
         </div>
@@ -143,7 +143,7 @@ const Login = () => {
         </div>
 
         <div>
-          <p className="text-sm text-blue-200">© 2025 RoomFinder. All rights reserved.</p>
+          <p className="text-sm text-blue-200">© 2025 Licxo. All rights reserved.</p>
         </div>
       </div>
 
