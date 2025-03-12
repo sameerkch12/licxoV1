@@ -1,18 +1,16 @@
 import React from "react";
 import { X, Check, Wifi, Home, BedDouble } from "lucide-react";
-import { Range } from "react-range";
 
 export const FilterContent = ({
-  filters,         // e.g. { roomType: "", bed: "", wifi: false, furnished: false }
-  onFilterChange,  // function to update parent state
-  onClear,         // function to reset all filters
-  onApply,         // function to apply filters
-  onClose,         // function to close the filter modal
+  filters,
+  onFilterChange,
+  onClear,
+  onApply,
+  onClose,
 }) => {
-  const maxPrice = filters.maxPrice || 10000; // Default max price
-
-  const handlePriceChange = (values) => {
-    onFilterChange({ maxPrice: values[0] });
+  const handlePriceChange = (e) => {
+    const { name, value } = e.target;
+    onFilterChange({ [name]: value ? Number(value) : "" });
   };
 
   const handleRoomTypeSelection = (type) => {
@@ -45,7 +43,7 @@ export const FilterContent = ({
           <X size={20} />
         </button>
 
-        {/* Room Type (Single-Select) */}
+        {/* Room Type */}
         <div className="mb-6">
           <h3 className="text-base font-semibold mb-3 text-gray-900">
             Room Type
@@ -71,7 +69,7 @@ export const FilterContent = ({
           </div>
         </div>
 
-        {/* Beds (Single-Select) */}
+        {/* Beds */}
         <div className="mb-6">
           <h3 className="text-base font-semibold mb-3 text-gray-900">Beds</h3>
           <div className="grid grid-cols-3 gap-2">
@@ -95,42 +93,37 @@ export const FilterContent = ({
           </div>
         </div>
 
-        {/* Price Range Slider (Only Max Price) */}
+        {/* Min & Max Price */}
         <div className="mb-6">
           <h3 className="text-base font-semibold mb-3 text-gray-900">
-            Max Price
+            Price Range
           </h3>
-          <div className="flex justify-between text-sm mb-2">
-            <span>₹500</span>
-            <span>₹{maxPrice}</span>
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              type="number"
+              name="minPrice"
+              value={filters.minPrice || ""}
+              onChange={handlePriceChange}
+              placeholder="Min Price"
+              className="border rounded-lg p-2 w-full text-gray-700"
+            />
+            <input
+              type="number"
+              name="maxPrice"
+              value={filters.maxPrice || ""}
+              onChange={handlePriceChange}
+              placeholder="Max Price"
+              className="border rounded-lg p-2 w-full text-gray-700"
+            />
           </div>
-          <Range
-            step={100}
-            min={500}
-            max={10000}
-            values={[maxPrice]}
-            onChange={handlePriceChange}
-            renderTrack={({ props, children }) => (
-              <div {...props} className="h-2 bg-gray-300 rounded-lg relative">
-                {children}
-              </div>
-            )}
-            renderThumb={({ props }) => (
-              <div
-                {...props}
-                className="w-4 h-4 bg-black rounded-full cursor-pointer"
-              />
-            )}
-          />
         </div>
 
-        {/* Amenities (Furnished, WiFi) */}
+        {/* Amenities */}
         <div className="mb-6">
           <h3 className="text-base font-semibold mb-3 text-gray-900">
             Amenities
           </h3>
           <div className="grid grid-cols-1 gap-2">
-            {/* Furnished */}
             <button
               onClick={() =>
                 onFilterChange({ furnished: !filters.furnished })
@@ -146,7 +139,6 @@ export const FilterContent = ({
               {filters.furnished && <Check size={16} className="ml-auto" />}
             </button>
 
-            {/* WiFi */}
             <button
               onClick={() => onFilterChange({ wifi: !filters.wifi })}
               className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
@@ -162,8 +154,9 @@ export const FilterContent = ({
           </div>
         </div>
 
-        {/* Actions (Clear / Apply) */}
-        <div className="flex justify-end gap-2">
+        {/* Actions */}
+         {/* Actions (Clear / Apply) */}
+         <div className="flex justify-end gap-2">
           <button
             onClick={onClear}
             className="px-3 py-2 text-gray-600 hover:text-gray-900 font-medium transition-colors flex items-center gap-1.5 text-sm"

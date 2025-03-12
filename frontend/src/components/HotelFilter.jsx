@@ -12,8 +12,9 @@ export const HotelFilter = () => {
   const [filters, setFilters] = useState({
     roomType: "",   // e.g. "1BHK", "2BHK", "3BHK", or "Single Room"
     bed: "",        // e.g. "1Bed", "2Bed", "3Bed"
-    wifi: false,    // Changed from null to false
-    furnished: false, // Changed from null to false
+    wifi: false,    
+    furnished: false,
+    minPrice: 500, // Default min price
     maxPrice: 10000, // Default max price
   });
 
@@ -23,6 +24,7 @@ export const HotelFilter = () => {
     !!filters.bed ||
     filters.wifi ||
     filters.furnished ||
+    filters.minPrice !== 500 ||
     filters.maxPrice !== 10000;
 
   // Update local state with partial changes
@@ -37,6 +39,7 @@ export const HotelFilter = () => {
       bed: "",
       wifi: false,
       furnished: false,
+      minPrice: 500,
       maxPrice: 10000,
     };
     setFilters(defaultFilters);
@@ -47,12 +50,12 @@ export const HotelFilter = () => {
 
   // Apply filters to the back-end
   const applyFilters = () => {
-    // Convert our booleans to what the API expects
     const apiFilters = {
       room: filters.roomType || undefined,
       bed: filters.bed || undefined,
       wifi: filters.wifi ? "Yes" : undefined,
       furnished: filters.furnished ? "Yes" : undefined,
+      minPrice: filters.minPrice || undefined,
       maxPrice: filters.maxPrice || undefined,
     };
 
