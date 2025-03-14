@@ -7,6 +7,7 @@ const connectCloudinary = require("./src/config/cloudinary");
 const userRoute = require("./src/routes/userRouter");
 const hotelRoute = require("./src/routes/hotelRouter");
 const https = require('https');
+const shortlistRoute = require("./src/routes/shortlistRoute");
 
 
 
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 // Routes
 app.use("/api/v1/hotels", hotelRoute);
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/shortlist", shortlistRoute);
 
 
 // Default route
