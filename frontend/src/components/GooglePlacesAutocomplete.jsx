@@ -5,19 +5,26 @@ const GooglePlacesAutocomplete = ({ searchQuery, setSearchQuery, setSearchParams
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (!window.google) {
-      console.error("Google Maps JavaScript API not loaded.");
-      return;
-    }
+    const checkGoogleMaps = () => {
+      if (window.google && window.google.maps) {
+        initAutocomplete();
+      } else {
+        setTimeout(checkGoogleMaps, 500);
+      }
+    };
 
+    checkGoogleMaps();
+  }, []);
+
+  const initAutocomplete = () => {
     const autoCompleteInstance = new window.google.maps.places.Autocomplete(inputRef.current, {
-      types: ["geocode"], // You can change this to "establishment" for businesses
-      componentRestrictions: { country: "IN" }, // Restrict to a specific country if needed
+      types: ["geocode"],
+      componentRestrictions: { country: "IN" },
     });
 
     autoCompleteInstance.addListener("place_changed", () => handlePlaceSelect(autoCompleteInstance));
     setAutocomplete(autoCompleteInstance);
-  }, []);
+  };
 
   const handlePlaceSelect = (autoCompleteInstance) => {
     const place = autoCompleteInstance.getPlace();
