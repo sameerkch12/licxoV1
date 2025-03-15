@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { jwtDecode } from "jwt-decode";
-import Navbar from "../components/Navbar";
 import BackButton from "../components/backbuttom";
 
 
