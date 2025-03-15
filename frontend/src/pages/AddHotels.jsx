@@ -17,6 +17,7 @@ import {
 import PlacesAutocomplete from "react-places-autocomplete";
 import { jwtDecode } from "jwt-decode";
 import Navbar from "../components/Navbar";
+import BackButton from "../components/backbuttom";
 
 
 const token = localStorage.getItem("token");
@@ -236,15 +237,7 @@ const AddHotels = () => {
       )}
 
       <div className="max-w-3xl mx-auto">
-        <div className="mb-8 flex items-center">
-          <Link
-            to="/"
-            className="flex items-center text-blue-600 hover:text-blue-800"
-          >
-            <ArrowLeft className="h-5 w-5 mr-2" />
-            <span>Back </span>
-          </Link>
-        </div>
+        <BackButton/>
 
         <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-8">
